@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Book Store - Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Book Store</h1>
+        <h2>
+            <span th:text="'Hello, ' + ${message}"></span>
+        </h2>
+    </div>
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddBook"
+            aria-expanded="false" aria-controls="collapseAddBook">
+        Add Book
+    </button>
+    <br/>
+    <div class="collapse" id="collapseAddBook">
+        <div class="card card-body">
+            <form id="addBookForm" action="/admin/edit" method="post">
+                <div class="formText">
+
+                    <div>
+                        <label class="form-label"> Book Name </label>
+                        <input type="text" class="form-control" name="bookName" required>
+                    </div>
+                    <div>
+                        <label class="form-label"> Image </label>
+                        <input type="text" class="form-control" name="bookImage" required>
+                    </div>
+                    <div>
+                        <label class="form-label"> Quantity </label>
+                        <input type="text" class="form-control" name="bookQuantity" required>
+                    </div>
+                    <div>
+                        <label class="form-label"> Price </label>
+                        <input type="text" class="form-control" name="bookPrice" required>
+                    </div>
+                    <div>
+                        <label class="form-label"> Discount </label>
+                        <input type="text" class="form-control" name="bookDiscount" required>
+                    </div>
+                    <br/>
+                    <input type="submit" value="Save">
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <button class="btn btn-primary"> View Payments</button>
+    <br/><br/>
+    <button class="btn btn-primary"> Logout</button>
+
+
+<!--    <p>-->
+<!--        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
+<!--            Button with data-bs-target-->
+<!--        </button>-->
+<!--    </p>-->
+<!--    <div class="collapse" id="collapseExample">-->
+<!--        <div class="card card-body">-->
+<!--            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.-->
+<!--        </div>-->
+<!--    </div>-->
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+</body>
+</html>
