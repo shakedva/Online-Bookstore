@@ -2,24 +2,24 @@ package hac.ex4.dao;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Book
 {
-    @GeneratedValue
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
     private String image = "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg";
     private int quantity;
-    private int price;
+    private double price;
     private double discount = 0;
 
     public Book() {}
 
-    public Book (String name, String image, int quantity, int price, double discount) {
+    public Book (String name, String image, int quantity, double price, double discount) {
         this.name = name;
         this.image = image;
         this.quantity = quantity;
@@ -51,11 +51,11 @@ public class Book
 
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) { this.price = price; }
+    public void setPrice(double price) { this.price = price; }
 
     public double getDiscount() {
         return discount;
