@@ -1,17 +1,21 @@
-package hac.ex4.dao;
+package hac.ex4.repo;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Book
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
+
+    @NotEmpty(message = "Name is mandatory")
     private String name;
+
     private String image = "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg";
     private int quantity;
     private double price;
