@@ -1,9 +1,13 @@
 package hac.ex4.repo;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -16,16 +20,26 @@ public class Book
     @NotEmpty(message = "Name is mandatory")
     private String name;
 
-    private String image = "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg";
+    @NotEmpty(message = "Image is mandatory")
+    private String image;
+
+    @Min(value = 0,
+        message = "The quantity must be an integer number")
     private int quantity;
+
+    @DecimalMin(value = "0.0",
+                message = "The price must be a floating point number") //todo >=0
     private double price;
+
+    @DecimalMin(value = "0.0",
+            message = "The discount must be a floating point number")
     private double discount = 0;
 
     public Book() {}
 
     public Book (String name, String image, int quantity, double price, double discount) {
-        this.name = name;
-        this.image = image;
+        this.name = name.trim();
+        this.image = image.trim();
         this.quantity = quantity;
         this.price = price;
         this.discount = discount;
@@ -37,16 +51,15 @@ public class Book
 
     public String getName() { return name; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name.trim(); }
 
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
-        this.image = image;
+
+        this.image = image.trim().equals("") ? "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg" : image.trim();
     }
 
     public int getQuantity() {
@@ -59,7 +72,7 @@ public class Book
         return price;
     }
 
-    public void setPrice(double price) { this.price = price; }
+    public void setPrice(double price) { this.price = price;}
 
     public double getDiscount() {
         return discount;

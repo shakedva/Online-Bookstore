@@ -43,7 +43,6 @@ public class BookController {
             model.addAttribute("errors", true);
             return "adminEdit";
         }
-
         bookService.saveBook(book);
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);

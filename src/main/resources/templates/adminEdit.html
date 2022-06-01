@@ -15,16 +15,16 @@
     <div class="starter-template">
         <h1>Book Store</h1>
         <h2>
-            <span th:text=" 'Hello Admin '"></span>
+            <span Hello Admin ></span>
         </h2>
     </div>
 
     <button class="btn btn-primary" id="addBookBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddBook"
-            aria-expanded="false" aria-controls="collapseAddBook">
+            aria-expanded="true" aria-controls="collapseAddBook">
         Add Book
     </button>
     <br/>
-    <div class="collapse" id="collapseAddBook">
+    <div class="collapse show" id="collapseAddBook">
         <div class="card card-body">
             <form action="#" th:action="@{/admin/addBook}" th:object="${book}" method="post">
                 <div class="formText">
@@ -35,19 +35,23 @@
                     </div>
                     <div>
                         <label class="form-label"> Image </label>
-                        <input type="text" th:field="*{image}" class="form-control" placeholder="Image" required>
+                        <input type="text" th:field="*{image}" class="form-control" placeholder="Image">
+                        <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-danger"></span>
                     </div>
                     <div>
                         <label class="form-label"> Quantity </label>
-                        <input type="text" th:field="*{quantity}" class="form-control" placeholder="Quantity" required>
+                        <input type="text" th:field="*{quantity}" class="form-control" placeholder="Quantity">
+                        <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="text-danger"></span>
                     </div>
                     <div>
                         <label class="form-label"> Price </label>
-                        <input type="text" th:field="*{price}" class="form-control" placeholder="Price" required>
+                        <input type="text" th:field="*{price}" class="form-control" placeholder="Price">
+                        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></span>
                     </div>
                     <div>
                         <label class="form-label"> Discount </label>
-                        <input type="text" th:field="*{discount}" class="form-control" placeholder="Discount" required>
+                        <input type="text" th:field="*{discount}" class="form-control" placeholder="Discount">
+                        <span th:if="${#fields.hasErrors('discount')}" th:errors="*{discount}" class="text-danger"></span>
                     </div>
                     <br/>
                     <input type="submit" value="Save">
@@ -95,16 +99,13 @@
 </body>
 </html>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function ()
-    {
-        if(document.getElementById("errors").innerHTML === true)
-        {
-            console.log(document.getElementById("errors").innerHTML)
-            console.log("BEFORE: " + document.getElementById("addBookBtn").getAttribute("aria-expanded"));
-            document.getElementById("addBookBtn").click();
-            console.log("AFTER: " +document.getElementById("addBookBtn").getAttribute("aria-expanded"));
-            alert("something");
-        }
-    })
-</script>
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function ()-->
+<!--    {-->
+<!--        if(document.getElementById("errors").innerHTML === true)-->
+<!--        {-->
+<!--            document.getElementById("collapseAddBook").classList.add("show")-->
+<!--            document.getElementById("addBookBtn").ariaExpanded = "true"-->
+<!--        }-->
+<!--    })-->
+<!--</script>-->
