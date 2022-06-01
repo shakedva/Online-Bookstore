@@ -1,24 +1,16 @@
 package hac.ex4.admin;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import hac.ex4.repo.Book;
 import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 
 import javax.validation.Valid;
 
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,12 +24,15 @@ public class BookController {
     {
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
+//        model.addAttribute("currEdit", 0);
+
         return "adminEdit";
     }
 
     @PostMapping("/addBook")
     public String adminAddBook(@Valid Book book, BindingResult result, Document doc, Model model)
     {
+//        model.addAttribute("currEdit", 0);
         if (result.hasErrors()) {
             model.addAttribute("books", bookService.getBooks());
             model.addAttribute("errors", true);
@@ -49,14 +44,70 @@ public class BookController {
         return "redirect:/admin/edit";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteBook(@PathVariable("id") long id, Model model) {
+        Book book = bookService
+                .getBook(id)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Invalid book Id:" + id)
+                );
+        bookService.deleteBook(book);
+        model.addAttribute("books", bookService.getBooks());
+        model.addAttribute("errors", false);
+//        model.addAttribute("currEdit", 0);
+
+        return "redirect:/admin/edit";
+    }
+
+    @PostMapping("/editBook")
+    public String editUser(@RequestParam("id") long id, Model model) {
+        Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
+        model.addAttribute("book", book);
+        return "updateBook";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            book.setId(id);
+            model.addAttribute("errors", true);
+            return "updateBook";
+        }
+
+        bookService.saveBook(book);
+        model.addAttribute("books", bookService.getBooks());
+        model.addAttribute("errors", false);
+        return "redirect:/admin/edit";
+    }
+
 //
-//    @PostMapping("/edit")
-//    public String addUser(Book user, BindingResult result, Model model) {
+//    @GetMapping("/edit/{id}")
+//    public String editBook(@PathVariable("id") long id, Model model) {
+//        Book book = bookService
+//                .getBook(id)
+//                .orElseThrow(
+//                        () -> new IllegalArgumentException("Invalid book Id:" + id)
+//                );
+//        model.addAttribute("currEdit", id);
+//        model.addAttribute("books", bookService.getBooks());
+//        model.addAttribute("errors", false);
+//        return "adminEdit";
+//    }
+//
+//    @PostMapping("/update/{id}")
+//    public String updateUser(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
 //        if (result.hasErrors()) {
-//            return "cannot add book";
+//            model.addAttribute("books", bookService.getBooks());
+//            model.addAttribute("errors", true);
+//            model.addAttribute("currEdit", id);
+//            return "adminEdit";
 //        }
 //
-//        bookRepository.save(user);
+//        bookService.saveBook(book);
+//        model.addAttribute("books", bookService.getBooks());
+//        model.addAttribute("errors", false);
+//        model.addAttribute("currEdit", 0);
 //        return "redirect:/admin/edit";
 //    }
+
 }

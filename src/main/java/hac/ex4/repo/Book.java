@@ -79,4 +79,6 @@ public class Book
     }
 
     public void setDiscount(double discount) { this.discount = discount; }
+
+    public void setId(long id) { this.id = id; }
 }

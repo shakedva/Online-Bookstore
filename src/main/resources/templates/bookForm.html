@@ -1,0 +1,32 @@
+<div th:fragment="bookForm">
+    <div class="formText">
+        <div>
+            <label class="form-label"> Book Name </label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="Name">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+        </div>
+        <div>
+            <label class="form-label"> Image </label>
+            <input type="text" th:field="*{image}" class="form-control" placeholder="Image">
+            <span th:if="${#fields.hasErrors('image')}" th:errors="*{image}" class="text-danger"></span>
+        </div>
+        <div>
+            <label class="form-label"> Quantity </label>
+            <input type="text" th:field="*{quantity}" class="form-control" placeholder="Quantity">
+            <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"
+                  class="text-danger"></span>
+        </div>
+        <div>
+            <label class="form-label"> Price </label>
+            <input type="text" th:field="*{price}" class="form-control" placeholder="Price">
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></span>
+        </div>
+        <div>
+            <label class="form-label"> Discount </label>
+            <input type="text" th:field="*{discount}" class="form-control" placeholder="Discount">
+            <span th:if="${#fields.hasErrors('discount')}" th:errors="*{discount}"
+                  class="text-danger"></span>
+        </div>
+        <br/>
+    </div>
+</div>
