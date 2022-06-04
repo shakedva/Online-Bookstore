@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-6">
             <form action="#" th:action="@{/admin/update/{id}(id=${book.id})}" th:object="${book}" method="post">
-                <span th:insert="bookForm.html :: bookForm "></span>
+                <span th:insert="admin/bookForm.html :: bookForm "></span>
                 <input type="submit" class="btn btn-primary" value="Update Book">
             </form>
         </div>

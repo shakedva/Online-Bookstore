@@ -1,4 +1,4 @@
-package hac.ex4.admin;
+package hac.ex4.controllers;
 
 import hac.ex4.repo.Book;
 import hac.ex4.services.BookService;
@@ -14,20 +14,21 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
-public class BookController {
+public class AdminController {
 
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/edit")
+    @GetMapping("/") //todo edit
     public String adminEditStore(Book book, @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model)
     {
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
 //        model.addAttribute("currEdit", 0);
 
-        return "adminEdit";
+        return "admin/adminEdit";
     }
+
 
     @PostMapping("/addBook")
     public String adminAddBook(@Valid Book book, BindingResult result, Document doc, Model model)
@@ -36,12 +37,12 @@ public class BookController {
         if (result.hasErrors()) {
             model.addAttribute("books", bookService.getBooks());
             model.addAttribute("errors", true);
-            return "adminEdit";
+            return "admin/adminEdit";
         }
         bookService.saveBook(book);
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
-        return "redirect:/admin/edit";
+        return "redirect:/admin/"; //todo edit
     }
 
     @GetMapping("/delete/{id}")
@@ -56,14 +57,14 @@ public class BookController {
         model.addAttribute("errors", false);
 //        model.addAttribute("currEdit", 0);
 
-        return "redirect:/admin/edit";
+        return "redirect:/admin/"; //todo edit
     }
 
     @PostMapping("/editBook")
     public String editUser(@RequestParam("id") long id, Model model) {
         Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
         model.addAttribute("book", book);
-        return "updateBook";
+        return "admin/updateBook";
     }
 
     @PostMapping("/update/{id}")
@@ -71,13 +72,13 @@ public class BookController {
         if (result.hasErrors()) {
             book.setId(id);
             model.addAttribute("errors", true);
-            return "updateBook";
+            return "admin/updateBook";
         }
 
         bookService.saveBook(book);
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
-        return "redirect:/admin/edit";
+        return "redirect:/admin/"; //todo edit
     }
 
 //
