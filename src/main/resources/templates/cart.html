@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<a th:href="@{/emptyCart}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i>Empty Cart</a>
+
 <div class="row">
     <div th:switch="${books.size()}">
         <h2 th:case="0">Empty Cart!</h2>

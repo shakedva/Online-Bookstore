@@ -75,7 +75,12 @@ public class StoreController {
     @GetMapping("/viewCart")
     public String storeCart(Model model, HttpSession session)
     {
-        List<Book> booksList =  (List<Book>) session.getAttribute("cart");
+        List<Book> booksList;
+        if( session.getAttribute("cart") == null)
+            booksList = new ArrayList<>();
+        else
+            booksList = (List<Book>) session.getAttribute("cart");
+
         model.addAttribute("books", booksList);
         return "cart";
     }
@@ -94,6 +99,12 @@ public class StoreController {
                 booksList.remove(i);
                 break;
         }
-        return "redirect:/viewCart"; //todo edit
+        return "redirect:/viewCart";
+    }
+
+    @GetMapping("/emptyCart")
+    public String deleteBook(Model model, HttpSession session) {
+        session.removeAttribute("cart");
+        return "redirect:/viewCart";
     }
 }
