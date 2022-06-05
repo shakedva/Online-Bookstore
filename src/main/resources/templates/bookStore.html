@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 </head>
 <body>
 
     <h1>Welcome to the book store</h1>
+
+<!--    <form action="#" th:action="@{/search}" th:object="${keyword}" method="post">-->
+    <form action="#" th:action="@{/search}" method="post">
+        <input type="text" name="keyword" class="form-control" placeholder="...">
+        <input class="btn btn-primary" type="submit" value="Search" />
+    </form>
 
     <div class="row">
         <div th:switch="${discountBooks.size()}">
@@ -18,9 +26,12 @@
                         <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${book.name}"></h5>
-                            Quantity: <span th:text="${book.quantity}"></span> <br/>
                             Price: <span th:text="${book.price}"></span> ₪ <br/>
-                            Discount: <span th:text="${book.discount}"></span> <br/>
+                            Discount: <span th:text="${book.discount}"></span> % <br/>
+                            <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
+                                <input type="hidden" name="id" th:value="${book.id}">
+                                <input class="btn btn-primary" type="submit" value="Add to Cart" />
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -30,3 +41,8 @@
 
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous">
+</script>

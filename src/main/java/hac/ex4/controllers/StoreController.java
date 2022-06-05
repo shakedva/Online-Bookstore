@@ -5,9 +5,18 @@ import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.w3c.dom.Document;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/")
@@ -17,9 +26,44 @@ public class StoreController {
     private BookService bookService;
 
     @GetMapping("")
-    public String adminEditStore(Book book, Model model)
+    public String store(Model model)
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
+        model.addAttribute("searchedBooks", bookService.listAll(""));
         return "bookStore";
+    }
+
+    @PostMapping("/search")
+//    public String adminAddBook(String keyword, Model model)
+    public String storeSearch(@RequestParam String keyword, Model model)
+    {
+        System.out.println("keyword received: " + keyword );
+        model.addAttribute("searchedBooks", bookService.listAll(keyword));
+//        if (result.hasErrors()) {
+//
+//            model.addAttribute("errors", true);
+//            return "bookStore";
+//        }
+//        model.addAttribute("books", bookService.getBooks());
+//        model.addAttribute("errors", false);
+//        return "redirect:/admin/"; //todo edit
+        return "searchedBooks";
+    }
+
+    @PostMapping("/addToCart")
+    public String storeAddToCart(@RequestParam("id") long id, Model model, HttpSession session)
+    {
+        Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
+
+        String booksList = (String) session.getAttribute("cart");
+
+        if( session.getAttribute("cart") == null)
+            session.setAttribute("cart",  String.valueOf(book.getId()));
+        else
+            session.setAttribute("cart", booksList + " " + book.getId());
+
+        System.out.println("booksList: " + session.getAttribute("cart"));
+        return "redirect:/";
+
     }
 }

@@ -43,4 +43,11 @@ public class BookService
         return repository.findFirst5ByDiscount();
     }
 
+    public List<Book> listAll(String keyword) {
+        if (keyword != null) {
+            return repository.search(keyword);
+        }
+        return repository.findAll();
+    }
+
 }

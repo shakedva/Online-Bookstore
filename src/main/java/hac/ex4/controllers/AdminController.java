@@ -31,7 +31,7 @@ public class AdminController {
 
 
     @PostMapping("/addBook")
-    public String adminAddBook(@Valid Book book, BindingResult result, Document doc, Model model)
+    public String adminAddBook(@Valid Book book, BindingResult result, Model model)
     {
 //        model.addAttribute("currEdit", 0);
         if (result.hasErrors()) {
