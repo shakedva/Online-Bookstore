@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Book Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 </head>
@@ -15,9 +15,9 @@
         <input type="text" name="keyword" class="form-control" placeholder="...">
         <input class="btn btn-primary" type="submit" value="Search" />
     </form>
-    <button> Cart
+    <a role="button" class="btn btn-primary" href="/viewCart"> Cart
         (<span th:text="${cartSize}"></span>)
-    </button>
+    </a>
     <div class="row">
         <div th:switch="${discountBooks.size()}">
             <h2 th:case="0">No books yet!</h2>

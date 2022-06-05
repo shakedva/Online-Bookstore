@@ -57,14 +57,6 @@
                                 <input type="hidden" name="id" th:value="${book.id}">
                                 <input class="btn btn-primary" type="submit" value="Edit" />
                             </form>
-
-<!--                            <a th:href="@{/admin/edit/{id}(id=${book.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i>Edit</a>-->
-<!--                            <form th:if="${currEdit} != ${book.id}" th:class="d-none"-->
-<!--                                    action="#" th:action="@{/admin/update/{id}(id=${book.id})}" th:object="${book}" method="post"><input type="hidden" name="id" th:value="${book.id}">-->
-<!--                                <span th:insert="bookForm.html :: bookForm "></span>-->
-<!--                                <input class="btn btn-primary" type="submit" value="Save" />-->
-<!--                            </form>-->
-
                         </div>
                     </div>
                 </div>

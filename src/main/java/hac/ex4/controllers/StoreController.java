@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpSession;
@@ -74,5 +71,29 @@ public class StoreController {
 
         return "redirect:/";
 
+    }
+    @GetMapping("/viewCart")
+    public String storeCart(Model model, HttpSession session)
+    {
+        List<Book> booksList =  (List<Book>) session.getAttribute("cart");
+        model.addAttribute("books", booksList);
+        return "cart";
+    }
+
+    @GetMapping("/removeFromCart/{id}")
+    public String deleteBook(@PathVariable("id") long id, Model model, HttpSession session) {
+        Book book = bookService
+                .getBook(id)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Invalid book Id:" + id)
+                );
+        List<Book> booksList =  (List<Book>) session.getAttribute("cart");
+
+        for (int i=0; i<booksList.size(); i++)
+            if(booksList.get(i).getId() == id){
+                booksList.remove(i);
+                break;
+        }
+        return "redirect:/viewCart"; //todo edit
     }
 }
