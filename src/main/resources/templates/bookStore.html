@@ -11,11 +11,13 @@
     <h1>Welcome to the book store</h1>
 
 <!--    <form action="#" th:action="@{/search}" th:object="${keyword}" method="post">-->
-    <form action="#" th:action="@{/search}" method="post">
+    <form action="#" th:action="@{/search}" method="post" style="width: 50%">
         <input type="text" name="keyword" class="form-control" placeholder="...">
         <input class="btn btn-primary" type="submit" value="Search" />
     </form>
-
+    <button> Cart
+        (<span th:text="${cartSize}"></span>)
+    </button>
     <div class="row">
         <div th:switch="${discountBooks.size()}">
             <h2 th:case="0">No books yet!</h2>

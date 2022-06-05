@@ -26,15 +26,21 @@ public class StoreController {
     private BookService bookService;
 
     @GetMapping("")
-    public String store(Model model)
+    public String store(Model model, HttpSession session)
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
         model.addAttribute("searchedBooks", bookService.listAll(""));
+
+        List<Book> booksList = (List<Book>) session.getAttribute("cart");
+        if(session.getAttribute("cart") == null)
+            model.addAttribute("cartSize", 0);
+        else
+            model.addAttribute("cartSize", booksList.size());
+
         return "bookStore";
     }
 
     @PostMapping("/search")
-//    public String adminAddBook(String keyword, Model model)
     public String storeSearch(@RequestParam String keyword, Model model)
     {
         System.out.println("keyword received: " + keyword );
@@ -54,15 +60,18 @@ public class StoreController {
     public String storeAddToCart(@RequestParam("id") long id, Model model, HttpSession session)
     {
         Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
-
-        String booksList = (String) session.getAttribute("cart");
-
-        if( session.getAttribute("cart") == null)
-            session.setAttribute("cart",  String.valueOf(book.getId()));
-        else
-            session.setAttribute("cart", booksList + " " + book.getId());
+        List<Book> booksList;
+        if( session.getAttribute("cart") == null) {
+            booksList = new ArrayList<>();
+        }
+        else {
+            booksList = (List<Book>) session.getAttribute("cart");
+        }
+        booksList.add(book);
+        session.setAttribute("cart", booksList);
 
         System.out.println("booksList: " + session.getAttribute("cart"));
+
         return "redirect:/";
 
     }
