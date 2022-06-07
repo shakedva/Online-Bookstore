@@ -13,16 +13,25 @@
         <h2 th:case="0">No results</h2>
         <div th:case="*">
             <div class="row md-1" style="margin-bottom: 15px;">
-                <div class="card"  th:each="book : ${searchedBooks}" style="width: 12rem ; margin-right: 1rem ; text-align:center">
+                <div class="card" th:each="book : ${searchedBooks}"
+                     style="width: 12rem ; margin-right: 1rem ; text-align:center">
                     <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${book.name}"></h5>
-                        Price: <span th:text="${book.price}"></span> ₪ <br/>
-                        Discount: <span th:text="${book.discount}"></span> % <br/>
-                        <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
-                            <input type="hidden" name="id" th:value="${book.id}">
-                            <input class="btn btn-primary" type="submit" value="Add to Cart" />
-                        </form>
+                        Price:
+                        <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                <span th:text="${result}"></span>₪
+                            </span>
+                        <small th:if="${book.discount} > 0" style="text-decoration: line-through;">
+                            <span th:text="${book.price}"></span>₪
+                        </small> <br/>
+                        <span th:if="${book.quantity} == 0"> Out of Stock </span>
+                        <span th:if="${book.quantity} != 0">
+                            <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
+                                <input type="hidden" name="id" th:value="${book.id}">
+                                <input class="btn btn-primary" type="submit" value="Add to Cart"/>
+                            </form>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.sql.SQLException;
 
 @Entity
 public class Book
@@ -81,4 +82,10 @@ public class Book
     public void setDiscount(double discount) { this.discount = discount; }
 
     public void setId(long id) { this.id = id; }
+
+    public double getPriceAfterDiscount() {
+        return this.price - this.price * this.discount / 100;
+    }
+
+
 }

@@ -15,4 +15,9 @@ public interface BookRepository extends JpaRepository<Book, Long>  {
     @Query("SELECT b FROM Book b WHERE b.name LIKE %?1%")
     public List<Book> search(String keyword);
 
+    @Query("UPDATE Book set quantity = quantity - 1 where quantity > 0")
+    public void updateQuantity(Book b);
+
 }
+
+// SELECT * FROM `book` order by discount DESC limit 5; (and quantity > 0)

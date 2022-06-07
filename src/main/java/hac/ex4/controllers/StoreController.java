@@ -42,14 +42,6 @@ public class StoreController {
     {
         System.out.println("keyword received: " + keyword );
         model.addAttribute("searchedBooks", bookService.listAll(keyword));
-//        if (result.hasErrors()) {
-//
-//            model.addAttribute("errors", true);
-//            return "bookStore";
-//        }
-//        model.addAttribute("books", bookService.getBooks());
-//        model.addAttribute("errors", false);
-//        return "redirect:/admin/"; //todo edit
         return "searchedBooks";
     }
 
@@ -70,7 +62,6 @@ public class StoreController {
         System.out.println("booksList: " + session.getAttribute("cart"));
 
         return "redirect:/";
-
     }
     @GetMapping("/viewCart")
     public String storeCart(Model model, HttpSession session)
@@ -80,13 +71,18 @@ public class StoreController {
             booksList = new ArrayList<>();
         else
             booksList = (List<Book>) session.getAttribute("cart");
-
+        double totalPay = 0;
+        for(int i=0; i< booksList.size(); i++) {
+            totalPay += booksList.get(i).getPriceAfterDiscount();
+        }
         model.addAttribute("books", booksList);
+        model.addAttribute("totalPay", totalPay);
+
         return "cart";
     }
 
     @GetMapping("/removeFromCart/{id}")
-    public String deleteBook(@PathVariable("id") long id, Model model, HttpSession session) {
+    public String deleteBookFromCart(@PathVariable("id") long id, Model model, HttpSession session) {
         Book book = bookService
                 .getBook(id)
                 .orElseThrow(
@@ -106,5 +102,36 @@ public class StoreController {
     public String deleteBook(Model model, HttpSession session) {
         session.removeAttribute("cart");
         return "redirect:/viewCart";
+    }
+
+    @GetMapping("/pay")
+    public String storePay(Model model, HttpSession session)
+    {
+
+        //todo - decrement all books from book db & sum the amount
+        //       add the payment to the payment db
+        //       empty the session
+        //       redirect to successfulpayment html
+        List<Book> booksList;
+        if( session.getAttribute("cart") == null) {
+            //todo redirect to error html page
+            return "redirect:/viewCart";
+        }
+
+        booksList = (List<Book>) session.getAttribute("cart");
+        if(bookService.pay(booksList))
+        {
+            session.removeAttribute("cart");
+            model.addAttribute("message", "The payment was successful!");
+        }
+        else
+        {
+            for (Book book : booksList)
+                if(!bookService.isInStock(book.getId())) // the book is not in stock
+                    deleteBookFromCart(book.getId(), model, session);
+
+            model.addAttribute("message", "Oops!There was a problem with the payment");
+        }
+        return "successfulPayment";
     }
 }

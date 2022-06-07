@@ -14,14 +14,25 @@
     <div th:switch="${books.size()}">
         <h2 th:case="0">Empty Cart!</h2>
         <div th:case="*">
-            <h2 class="my-5">Cart</h2>
+            <h2>Cart</h2>
+            <h5>
+                Total Payment:
+                <span th:text="${totalPay}"></span>₪
+            </h5></br>
+            <a th:href="@{/pay}" class="btn btn-primary">Checkout</a>
             <div class="row md-1" style="margin-bottom: 15px;">
                 <div class="card"  th:each="book : ${books}" style="width: 12rem ; margin-right: 1rem ; text-align:center">
                     <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${book.name}"></h5>
-                        Price: <span th:text="${book.price}"></span> ₪ <br/>
-                        Discount: <span th:text="${book.discount}"></span> % <br/>
+                        Price:
+                        <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                <span th:text="${result}"></span>₪
+                            </span>
+                        <small th:if="${book.discount} > 0" style="text-decoration: line-through;">
+                            <span th:text="${book.price}"></span>₪
+                        </small> <br/>
+                        <span th:if="${book.quantity} == 0"> Out of Stock </span>
                         <a th:href="@{/removeFromCart/{id}(id=${book.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i>Remove</a>
                     </div>
                 </div>

@@ -81,34 +81,4 @@ public class AdminController {
         return "redirect:/admin"; //todo edit
     }
 
-//
-//    @GetMapping("/edit/{id}")
-//    public String editBook(@PathVariable("id") long id, Model model) {
-//        Book book = bookService
-//                .getBook(id)
-//                .orElseThrow(
-//                        () -> new IllegalArgumentException("Invalid book Id:" + id)
-//                );
-//        model.addAttribute("currEdit", id);
-//        model.addAttribute("books", bookService.getBooks());
-//        model.addAttribute("errors", false);
-//        return "adminEdit";
-//    }
-//
-//    @PostMapping("/update/{id}")
-//    public String updateUser(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("books", bookService.getBooks());
-//            model.addAttribute("errors", true);
-//            model.addAttribute("currEdit", id);
-//            return "adminEdit";
-//        }
-//
-//        bookService.saveBook(book);
-//        model.addAttribute("books", bookService.getBooks());
-//        model.addAttribute("errors", false);
-//        model.addAttribute("currEdit", 0);
-//        return "redirect:/admin/edit";
-//    }
-
 }

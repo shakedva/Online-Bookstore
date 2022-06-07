@@ -8,38 +8,46 @@
 </head>
 <body>
 
-    <h1>Welcome to the book store</h1>
+<h1>Welcome to the book store</h1>
 
-<!--    <form action="#" th:action="@{/search}" th:object="${keyword}" method="post">-->
-    <form action="#" th:action="@{/search}" method="post" style="width: 50%">
-        <input type="text" name="keyword" class="form-control" placeholder="...">
-        <input class="btn btn-primary" type="submit" value="Search" />
-    </form>
-    <a role="button" class="btn btn-primary" href="/viewCart"> Cart
-        (<span th:text="${cartSize}"></span>)
-    </a>
-    <div class="row">
-        <div th:switch="${discountBooks.size()}">
-            <h2 th:case="0">No books yet!</h2>
-            <div th:case="*">
-                <h2 class="my-5">Top 5 Discount Books</h2>
-                <div class="row md-1" style="margin-bottom: 15px;">
-                    <div class="card"  th:each="book : ${discountBooks}" style="width: 12rem ; margin-right: 1rem ; text-align:center">
-                        <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${book.name}"></h5>
-                            Price: <span th:text="${book.price}"></span> ₪ <br/>
-                            Discount: <span th:text="${book.discount}"></span> % <br/>
+<form action="#" th:action="@{/search}" method="post" style="width: 50%">
+    <input type="text" name="keyword" class="form-control" placeholder="...">
+    <input class="btn btn-primary" type="submit" value="Search"/>
+</form>
+<a role="button" class="btn btn-primary" href="/viewCart"> Cart
+    (<span th:text="${cartSize}"></span>)
+</a>
+<div class="row">
+    <div th:switch="${discountBooks.size()}">
+        <h2 th:case="0">No books yet!</h2>
+        <div th:case="*">
+            <h2 class="my-5">Top 5 Discount Books</h2>
+            <div class="row md-1" style="margin-bottom: 15px;">
+                <div class="card" th:each="book : ${discountBooks}"
+                     style="width: 12rem ; margin-right: 1rem ; text-align:center">
+                    <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${book.name}"></h5>
+                        Price:
+                        <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                <span th:text="${result}"></span>₪
+                            </span>
+                        <small th:if="${book.discount} > 0" style="text-decoration: line-through;">
+                            <span th:text="${book.price}"></span>₪
+                        </small> <br/>
+                        <span th:if="${book.quantity} == 0"> Out of Stock </span>
+                        <span th:if="${book.quantity} != 0">
                             <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
                                 <input type="hidden" name="id" th:value="${book.id}">
-                                <input class="btn btn-primary" type="submit" value="Add to Cart" />
+                                <input class="btn btn-primary" type="submit" value="Add to Cart"/>
                             </form>
-                        </div>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 </html>
