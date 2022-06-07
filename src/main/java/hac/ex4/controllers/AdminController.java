@@ -19,7 +19,7 @@ public class AdminController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/") //todo edit
+    @GetMapping("") //todo edit
     public String adminEditStore(Book book, @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model)
     {
         model.addAttribute("books", bookService.getBooks());
@@ -42,7 +42,7 @@ public class AdminController {
         bookService.saveBook(book);
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
-        return "redirect:/admin/"; //todo edit
+        return "redirect:/admin"; //todo edit
     }
 
     @GetMapping("/delete/{id}")
@@ -57,7 +57,7 @@ public class AdminController {
         model.addAttribute("errors", false);
 //        model.addAttribute("currEdit", 0);
 
-        return "redirect:/admin/"; //todo edit
+        return "redirect:/admin"; //todo edit
     }
 
     @PostMapping("/editBook")
@@ -78,7 +78,7 @@ public class AdminController {
         bookService.saveBook(book);
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("errors", false);
-        return "redirect:/admin/"; //todo edit
+        return "redirect:/admin"; //todo edit
     }
 
 //

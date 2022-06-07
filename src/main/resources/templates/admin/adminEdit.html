@@ -29,7 +29,7 @@
         <div class="card card-body" style="width: 50%">
             <form action="#" th:action="@{/admin/addBook}" th:object="${book}" method="post">
                 <span th:insert="admin/bookForm.html :: bookForm "></span>
-                    <input type="submit" value="Save">
+                <input type="submit" value="Save">
             </form>
         </div>
     </div>
@@ -37,25 +37,32 @@
     <br/>
     <button class="btn btn-primary"> View Payments</button>
     <br/><br/>
-    <button class="btn btn-primary"> Logout</button>
+    <a role="button" href="/logout" class="btn btn-primary"> Logout </a>
     <div class="row">
         <div th:switch="${books.size()}">
             <h2 th:case="0">No books yet!</h2>
             <div th:case="*">
                 <h2 class="my-5">Books</h2>
                 <div class="row md-1" style="margin-bottom: 15px;">
-                    <div class="card"  th:each="book : ${books}" style="width: 12rem ; margin-right: 1rem ; text-align:center">
+                    <div class="card" th:each="book : ${books}"
+                         style="width: 12rem ; margin-right: 1rem ; text-align:center">
                         <img th:src="${book.image}" style="width: 10rem;" class="card-img-top" alt="book image">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${book.name}"></h5>
                             Quantity: <span th:text="${book.quantity}"></span> <br/>
-                            Price: <span th:text="${book.price}"></span> ₪ <br/>
-                            Discount: <span th:text="${book.discount}"></span> % <br/>
-                            <a th:href="@{/admin/delete/{id}(id=${book.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i>Delete</a>
+                            Price:
+                            <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                <span th:text="${result}"></span>₪
+                            </span>
+                            <small th:if="${book.discount} > 0" style="text-decoration: line-through;">
+                                <span th:text="${book.price}"></span>₪
+                            </small> <br/>
+                            <a th:href="@{/admin/delete/{id}(id=${book.id})}" class="btn btn-primary"><i
+                                    class="fas fa-user-times ml-2"></i>Delete</a>
 
                             <form action="#" th:action="@{/admin/editBook}" th:object="${book}" method="post">
                                 <input type="hidden" name="id" th:value="${book.id}">
-                                <input class="btn btn-primary" type="submit" value="Edit" />
+                                <input class="btn btn-primary" type="submit" value="Edit"/>
                             </form>
                         </div>
                     </div>
@@ -64,8 +71,8 @@
         </div>
     </div>
 
-<!--    <div th:text="${currEdit}"></div>-->
-<!--    <span th:insert="bookForm.html :: bla"></span>-->
+    <!--    <div th:text="${currEdit}"></div>-->
+    <!--    <span th:insert="bookForm.html :: bla"></span>-->
 
     <!--    style="width: 143px; height: 143px"-->
 

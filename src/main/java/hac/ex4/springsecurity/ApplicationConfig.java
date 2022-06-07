@@ -26,7 +26,7 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/admin/", true) //todo  /shared (?)
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/admin/")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")

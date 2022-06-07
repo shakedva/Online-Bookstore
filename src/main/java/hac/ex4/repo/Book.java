@@ -27,8 +27,8 @@ public class Book
         message = "The quantity must be an integer number")
     private int quantity;
 
-    @DecimalMin(value = "0.0",
-                message = "The price must be a floating point number") //todo >=0
+    @DecimalMin(value = "0.0",  inclusive = false,
+                message = "The price must be a positive floating point number")
     private double price;
 
     @DecimalMin(value = "0.0",
