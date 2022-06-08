@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.Document;
 
 import javax.validation.Valid;
 
@@ -23,9 +22,8 @@ public class AdminController {
     public String adminEditStore(Book book, @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model)
     {
         model.addAttribute("books", bookService.getBooks());
+        model.addAttribute("payments", bookService.getPayments());
         model.addAttribute("errors", false);
-//        model.addAttribute("currEdit", 0);
-
         return "admin/adminEdit";
     }
 
@@ -36,13 +34,12 @@ public class AdminController {
 //        model.addAttribute("currEdit", 0);
         if (result.hasErrors()) {
             model.addAttribute("books", bookService.getBooks());
+            model.addAttribute("payments", bookService.getPayments());
             model.addAttribute("errors", true);
             return "admin/adminEdit";
         }
         bookService.saveBook(book);
-        model.addAttribute("books", bookService.getBooks());
-        model.addAttribute("errors", false);
-        return "redirect:/admin"; //todo edit
+        return "redirect:/admin";
     }
 
     @GetMapping("/delete/{id}")
@@ -53,10 +50,6 @@ public class AdminController {
                         () -> new IllegalArgumentException("Invalid book Id:" + id)
                 );
         bookService.deleteBook(book);
-        model.addAttribute("books", bookService.getBooks());
-        model.addAttribute("errors", false);
-//        model.addAttribute("currEdit", 0);
-
         return "redirect:/admin"; //todo edit
     }
 
@@ -76,8 +69,6 @@ public class AdminController {
         }
 
         bookService.saveBook(book);
-        model.addAttribute("books", bookService.getBooks());
-        model.addAttribute("errors", false);
         return "redirect:/admin"; //todo edit
     }
 

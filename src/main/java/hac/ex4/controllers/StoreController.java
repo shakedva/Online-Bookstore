@@ -27,6 +27,7 @@ public class StoreController {
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
         model.addAttribute("searchedBooks", bookService.listAll(""));
+        model.addAttribute("books", bookService.getBooks());
 
         List<Book> booksList = (List<Book>) session.getAttribute("cart");
         if(session.getAttribute("cart") == null)

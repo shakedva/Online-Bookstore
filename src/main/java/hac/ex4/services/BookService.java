@@ -47,6 +47,10 @@ public class BookService
         return repository.findFirst5ByOrderByDiscountDesc();
     }
 
+    public List<Payment> getPayments() {
+        return paymentRepository.findAll();
+    }
+
     @Transactional
     public void decQuantity(Book b)
     {

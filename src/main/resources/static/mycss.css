@@ -1,0 +1,27 @@
+.titleRow
+{
+    background-color: #80D2F8;
+    padding: 1em;
+    text-align: center;
+}
+.body{
+    margin: 2em;
+}
+.bookCard{
+    width: 12rem;
+    margin-right: 1rem;
+    text-align:center;
+}
+.card-img-top{
+    width: 10rem;
+}
+img{
+    width: 10rem;
+}
+small{
+    text-decoration: line-through;
+}
+
+.search{
+    display:  inline-block;
+}

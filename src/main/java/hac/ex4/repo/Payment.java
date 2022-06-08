@@ -37,6 +37,11 @@ public class Payment {
     public Payment() {
     }
 
+    public long getId() {
+        return id;
+    }
+
+
     public double getAmount() {
         return amount;
     }
