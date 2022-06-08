@@ -30,7 +30,7 @@
                 <div class="card card-body">
                     <form action="#" th:action="@{/admin/addBook}" th:object="${book}" method="post">
                         <span th:insert="admin/bookForm.html :: bookForm "></span>
-                        <input type="submit" value="Save">
+                        <input type="submit" class="btn btn-primary" value="Save">
                     </form>
                 </div>
             </div>
