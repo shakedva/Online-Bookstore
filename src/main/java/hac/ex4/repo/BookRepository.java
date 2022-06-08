@@ -1,7 +1,9 @@
 package hac.ex4.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,15 +11,13 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>  {
 
-    @Query("select b from Book b order by b.discount DESC")
-    List<Book> findFirst5ByDiscount();
+    List<Book> findFirst5ByOrderByDiscountDesc();
 
     @Query("SELECT b FROM Book b WHERE b.name LIKE %?1%")
-    public List<Book> search(String keyword);
+    List<Book> search(String keyword);
 
-    @Query("UPDATE Book set quantity = quantity - 1 where quantity > 0")
-    public void updateQuantity(Book b);
+    @Modifying
+    @Query("UPDATE Book b set b.quantity = b.quantity - 1 where b.id = :id") //where quantity > 0  ~~ and b.quantity > 0
+    void updateQuantity(@Param(value = "id") long id);
 
 }
-
-// SELECT * FROM `book` order by discount DESC limit 5; (and quantity > 0)

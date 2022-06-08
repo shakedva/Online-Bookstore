@@ -95,43 +95,79 @@ public class StoreController {
                 booksList.remove(i);
                 break;
         }
+        if(booksList.size() == 0)
+            return "redirect:/emptyCart";
+
+        session.setAttribute("cart", booksList);
         return "redirect:/viewCart";
     }
 
     @GetMapping("/emptyCart")
-    public String deleteBook(Model model, HttpSession session) {
+    public String deleteBook(HttpSession session) {
         session.removeAttribute("cart");
+        return "redirect:/viewCart";
+    }
+
+    //todo delete for testing
+    @GetMapping("/decquantity")
+    public String decquantity() {
+        Book b = bookService
+                .getBook(6)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Invalid book Id:" + 6)
+                );
+        bookService.decQuantity(b);
         return "redirect:/viewCart";
     }
 
     @GetMapping("/pay")
     public String storePay(Model model, HttpSession session)
     {
-
-        //todo - decrement all books from book db & sum the amount
-        //       add the payment to the payment db
-        //       empty the session
-        //       redirect to successfulpayment html
         List<Book> booksList;
         if( session.getAttribute("cart") == null) {
-            //todo redirect to error html page
-            return "redirect:/viewCart";
+            model.addAttribute("message", "The cart is empty!");
+            return "successfulPayment";
         }
+        else {
+            try {
+                booksList = (List<Book>) session.getAttribute("cart");
+                bookService.pay(booksList);
+                session.removeAttribute("cart");
+                model.addAttribute("message", "Successful payment!");
+                return "successfulPayment";
+            }
+            catch (Exception e) {
+                model.addAttribute("message", "Unsuccessful payment! Please remove the books that are out of stock");
+                return "successfulPayment";
+            }
 
-        booksList = (List<Book>) session.getAttribute("cart");
-        if(bookService.pay(booksList))
-        {
-            session.removeAttribute("cart");
-            model.addAttribute("message", "The payment was successful!");
         }
-        else
-        {
-            for (Book book : booksList)
-                if(!bookService.isInStock(book.getId())) // the book is not in stock
-                    deleteBookFromCart(book.getId(), model, session);
-
-            model.addAttribute("message", "Oops!There was a problem with the payment");
-        }
-        return "successfulPayment";
     }
+
 }
+
+//    //todo - decrement all books from book db & sum the amount
+//    //       add the payment to the payment db
+//    //       empty the session
+//    //       redirect to successfulpayment html
+//    List<Book> booksList;
+//        if( session.getAttribute("cart") == null) {
+//                //todo redirect to error html page
+//                return "redirect:/viewCart";
+//                }
+//
+//                booksList = (List<Book>) session.getAttribute("cart");
+//        if(bookService.pay(booksList))
+//        {
+//        session.removeAttribute("cart");
+//        model.addAttribute("message", "The payment was successful!");
+//        }
+//        else
+//        {
+//        for (Book book : booksList)
+//        if(!bookService.isInStock(book.getId())) // the book is not in stock
+//        deleteBookFromCart(book.getId(), model, session);
+//
+//        model.addAttribute("message", "Oops!There was a problem with the payment");
+//        }
+//        return "successfulPayment";

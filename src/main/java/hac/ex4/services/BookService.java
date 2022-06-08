@@ -6,9 +6,12 @@ import hac.ex4.repo.Payment;
 import hac.ex4.repo.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +44,15 @@ public class BookService
 
     public List<Book> get5topDiscount()
     {
-        return repository.findFirst5ByDiscount();
+        return repository.findFirst5ByOrderByDiscountDesc();
     }
+
+    @Transactional
+    public void decQuantity(Book b)
+    {
+        repository.updateQuantity(b.getId());
+    }
+
 
     public List<Book> listAll(String keyword) {
         if (keyword != null) {
@@ -50,30 +60,49 @@ public class BookService
         }
         return repository.findAll();
     }
-    public boolean isInStock (long id)
+    public boolean isInStock (long id) // todo delete?
     {
         Book book = getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
         return book.getQuantity() != 0;
     }
 
     @Transactional
-    public boolean pay(List<Book> books) {
+    public void pay(List<Book> books)
+    {
         double totalPay = 0;
         for (Book book : books)
         {
-            totalPay += book.getPriceAfterDiscount();
-//            Book dbbook  = getBook(book.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + book.getId()));
-//            if(dbbook.getQuantity() == 0)
-//                return false;
-
-//            if(!isInStock(book.getId()))
-//                return false;
-////            book.decrementQuantity();
-
-            repository.updateQuantity(book); // todo check if works
-            saveBook(book);
+            totalPay+=book.getPriceAfterDiscount();
+            repository.updateQuantity(book.getId());
+//            if(checkBookValidity(book.getId()))
+            saveBook(repository.getById(book.getId()));
         }
-        paymentRepository.save(new Payment(totalPay));
-        return true;
+        System.out.println("total pay: " + totalPay);
+        Payment p = new Payment(totalPay);
+        paymentRepository.save(p);
     }
+//    public boolean checkBookValidity(long id, @Valid Book book, BindingResult result)
+//    {
+//        return !result.hasErrors();
+//    }
+
 }
+
+
+//    double totalPay = 0;
+//        for (Book book : books)
+//                {
+//                totalPay += book.getPriceAfterDiscount();
+////            Book dbbook  = getBook(book.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + book.getId()));
+////            if(dbbook.getQuantity() == 0)
+////                return false;
+//
+////            if(!isInStock(book.getId()))
+////                return false;
+//////            book.decrementQuantity();
+//
+//                repository.updateQuantity(book); // todo check if works
+//                saveBook(book);
+//                }
+//                paymentRepository.save(new Payment(totalPay));
+//                return true;
