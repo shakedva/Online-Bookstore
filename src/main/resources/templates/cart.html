@@ -9,20 +9,28 @@
 </head>
 <body class="body">
 <h2 class="titleRow">Cart</h2>
+
+<div class="d-flex bd-highlight mb-3">
+    <div class="p-2 bd-highlight">
+        <h3>
+            Total Payment:
+            <span th:text="${totalPay}"></span>₪
+        </h3>
+    </div>
+    <div class="p-2 bd-highlight"><a th:if="${totalPay} > 0" th:href="@{/pay}" class="btn btn-primary">Checkout</a></div>
+    <div class="ms-auto p-2 bd-highlight"><a th:href="@{/emptyCart}" class="btn btn-primary">Empty Cart</a>
+    </div>
+    <div class="p-2 bd-highlight">
+        <a th:href="@{/}" class="btn btn-outline-secondary">
+            <img th:src="@{/round_home_black_24dp.png}" alt="home">
+        </a>
+    </div>
+</div>
+
 <div class="row">
     <div th:switch="${books.size()}">
-        <h2 th:case="0">Empty Cart!</h2>
+        <h2 th:case="0">The cart is empty!</h2>
         <div th:case="*">
-            <div class="d-flex bd-highlight mb-3">
-                <div class="p-2 bd-highlight">
-                <h3>
-                    Total Payment:
-                    <span th:text="${totalPay}"></span>₪
-                </h3>
-                </div>
-                <div class="p-2 bd-highlight"> <a th:href="@{/pay}" class="btn btn-primary">Checkout</a> </div>
-                <div class="ms-auto p-2 bd-highlight"> <a th:href="@{/emptyCart}" class="btn btn-primary">Empty Cart</a> </div>
-            </div>
             </br>
             <div class="row md-1">
                 <div class="card bookCard" th:each="book : ${books}"

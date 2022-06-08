@@ -5,15 +5,11 @@ import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/")
@@ -26,7 +22,6 @@ public class StoreController {
     public String store(Model model, HttpSession session)
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
-        model.addAttribute("searchedBooks", bookService.listAll(""));
         model.addAttribute("books", bookService.getBooks());
 
         List<Book> booksList = (List<Book>) session.getAttribute("cart");
@@ -41,8 +36,8 @@ public class StoreController {
     @PostMapping("/search")
     public String storeSearch(@RequestParam String keyword, Model model)
     {
-        System.out.println("keyword received: " + keyword );
         model.addAttribute("searchedBooks", bookService.listAll(keyword));
+        model.addAttribute("keyword", keyword);
         return "searchedBooks";
     }
 

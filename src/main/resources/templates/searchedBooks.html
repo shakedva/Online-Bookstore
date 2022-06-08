@@ -7,8 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 </head>
-<body>
-
+<body class="body">
+<h2 class="titleRow">Search Results</h2>
+</br>
+<div class="d-flex flex-row-reverse bd-highlight">
+    <a th:href="@{/}" class="btn btn-outline-secondary">
+        <img th:src="@{/round_home_black_24dp.png}" alt="home">
+    </a>
+</div>
+<h3>
+    Your results for "<i th:text="${keyword}"></i>" are:
+</h3>
+</br>
 <div class="row">
     <div th:switch="${searchedBooks.size()}">
         <h2 th:case="0">No results</h2>
