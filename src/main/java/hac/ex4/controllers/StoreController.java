@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +55,6 @@ public class StoreController {
         }
         booksList.add(book);
         session.setAttribute("cart", booksList);
-
-        System.out.println("booksList: " + session.getAttribute("cart"));
-
         return "redirect:/";
     }
     @GetMapping("/viewCart")
