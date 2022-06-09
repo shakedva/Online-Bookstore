@@ -16,12 +16,15 @@
             <div class="input-group mb-3">
                 <input type="text" name="keyword" class="form-control"
                        placeholder="Search for books by keyword / title">
-                <input class="btn btn-primary" type="submit" value="Search"/>
+                <button type="submit" class="btn btn-primary">
+                    <img th:src="@{/round_search_white_24dp.png}" alt="search">
+                </button>
             </div>
         </form>
     </div>
     <div class="col-1">
-        <a role="button" class="btn btn-primary" href="/viewCart"> Cart
+        <a role="button" class="btn btn-primary" href="/viewCart">
+            <img th:src="@{/round_shopping_cart_white_24dp.png}" alt="cart" >
             (<span th:text="${cartSize}"></span>)
         </a>
     </div>
@@ -35,20 +38,24 @@
                 <div class="card bookCard" th:each="book : ${discountBooks}"
                      style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
                     <img th:src="${book.image}" class="card-img-top" alt="book image">
-                    <div class="card-body">
+                    <div class="card-body book-card-body">
                         <h5 class="card-title" th:text="${book.name}"></h5>
-                        Price:
-                        <span th:with="result=${book.price - book.price * book.discount / 100}">
-                                <span th:text="${result}"></span>₪
+                        <div>
+                            Price:
+                            <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                    <span th:text="${result}"></span>₪
                             </span>
-                        <small th:if="${book.discount} > 0">
-                            <span th:text="${book.price}"></span>₪
-                        </small> <br/>
+                            <small th:if="${book.discount} > 0">
+                                <span th:text="${book.price}"></span>₪
+                            </small>
+                        </div><br/>
                         <span th:if="${book.quantity} == 0"> Out of Stock </span>
-                        <span th:if="${book.quantity} != 0">
+                        <span class="card-button-bottom" th:if="${book.quantity} != 0">
                             <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
                                 <input type="hidden" name="id" th:value="${book.id}">
-                                <input class="btn btn-primary" type="submit" value="Add to Cart"/>
+                                <button type="submit" class="btn btn-primary">
+                                <img th:src="@{/round_add_shopping_cart_24dp.png}" alt="add to shopping cart">
+                                </button>
                             </form>
                         </span>
                     </div>
@@ -57,6 +64,8 @@
         </div>
     </div>
 </div>
+
+
 </br>
 <div class="row">
     <div th:switch="${books.size()}">
@@ -67,20 +76,24 @@
                 <div class="card bookCard" th:each="book : ${books}"
                      style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
                     <img th:src="${book.image}" class="card-img-top" alt="book image">
-                    <div class="card-body">
+                    <div class="card-body book-card-body">
                         <h5 class="card-title" th:text="${book.name}"></h5>
-                        Price:
-                        <span th:with="result=${book.price - book.price * book.discount / 100}">
-                                <span th:text="${result}"></span>₪
+                        <div>
+                            Price:
+                            <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                    <span th:text="${result}"></span>₪
                             </span>
-                        <small th:if="${book.discount} > 0">
-                            <span th:text="${book.price}"></span>₪
-                        </small> <br/>
+                            <small th:if="${book.discount} > 0">
+                                <span th:text="${book.price}"></span>₪
+                            </small>
+                        </div><br/>
                         <span th:if="${book.quantity} == 0"> Out of Stock </span>
-                        <span th:if="${book.quantity} != 0">
+                        <span class="card-button-bottom" th:if="${book.quantity} != 0">
                             <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
                                 <input type="hidden" name="id" th:value="${book.id}">
-                                <input class="btn btn-primary" type="submit" value="Add to Cart"/>
+                                <button type="submit" class="btn btn-primary">
+                                <img th:src="@{/round_add_shopping_cart_24dp.png}" alt="add to shopping cart">
+                                </button>
                             </form>
                         </span>
                     </div>
@@ -89,8 +102,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 </body>

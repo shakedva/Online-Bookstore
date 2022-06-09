@@ -1,6 +1,6 @@
 .titleRow
 {
-    background-color: #80D2F8;
+    background-color:  #b9e3f9;
     padding: 1em;
     text-align: center;
 }
@@ -23,3 +23,20 @@ small{
 .search{
     display:  inline-block;
 }
+.book-card-body{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+}
+.card-button-bottom {
+    margin-top: auto;
+}
+
+tr:nth-child(odd) {
+    background-color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #e7f6fd;
+}
+
