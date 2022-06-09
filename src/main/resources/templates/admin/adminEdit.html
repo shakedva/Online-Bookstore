@@ -42,7 +42,7 @@
                     <form action="#" th:action="@{/admin/addBook}" th:object="${book}" method="post">
                         <span th:insert="admin/bookForm.html :: bookForm "></span>
                         <button type="submit" class="btn btn-primary">
-                            Save <img th:src="@{/round_save_white_24dp.png}" alt="save">
+                           <img th:src="@{/round_save_white_24dp.png}" alt="save"> Save
                         </button>
                     </form>
                 </div>
@@ -58,7 +58,9 @@
                     <h2 th:case="0">No payments yet!</h2>
                     <div th:case="*">
                         <div class="card card-body">
-<!--                            table-striped-->
+                            <h6>The total payments are
+                                <span th:text="${totalPayments}"></span>₪
+                            </h6>
                             <table class="table table-responsive-md">
                                 <thead>
                                 <tr>

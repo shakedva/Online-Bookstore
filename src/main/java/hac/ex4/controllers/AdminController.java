@@ -1,6 +1,7 @@
 package hac.ex4.controllers;
 
 import hac.ex4.repo.Book;
+import hac.ex4.repo.Payment;
 import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -21,8 +23,14 @@ public class AdminController {
     @GetMapping("") //todo edit
     public String adminEditStore(Book book, @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model)
     {
+        List<Payment> payments =  bookService.getPayments();
+        double totalPayments = 0;
+        for (Payment payment : payments)
+            totalPayments += payment.getAmount();
+
         model.addAttribute("books", bookService.getBooks());
-        model.addAttribute("payments", bookService.getPayments());
+        model.addAttribute("payments", payments);
+        model.addAttribute("totalPayments", totalPayments);
         model.addAttribute("errors", false);
         return "admin/adminEdit";
     }
@@ -31,7 +39,6 @@ public class AdminController {
     @PostMapping("/addBook")
     public String adminAddBook(@Valid Book book, BindingResult result, Model model)
     {
-//        model.addAttribute("currEdit", 0);
         if (result.hasErrors()) {
             model.addAttribute("books", bookService.getBooks());
             model.addAttribute("payments", bookService.getPayments());

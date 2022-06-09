@@ -48,7 +48,7 @@ public class BookService
     }
 
     public List<Payment> getPayments() {
-        return paymentRepository.findAll();
+        return paymentRepository.findAllByOrderByDateCreatedAsc();
     }
 
     @Transactional
