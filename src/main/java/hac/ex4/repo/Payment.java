@@ -26,7 +26,6 @@ public class Payment {
     private double amount;
 
     @CreationTimestamp()
-//    @Default(current_timestamp)
     private LocalDateTime dateCreated;
 
     public Payment(double amount) {

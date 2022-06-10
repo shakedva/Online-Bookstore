@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookService
-{
+public class BookService {
     @Autowired
     private BookRepository repository;
 
@@ -32,18 +31,24 @@ public class BookService
     public List<Book> getBooks() {
         return repository.findAll();
     }
+
     public Optional<Book> getBook(long id) {
         return repository.findById(id);
     }
+
+    public List<Book> getBooksById(List<Long> bookIds) {
+        return repository.findByIdIn(bookIds);
+    }
+
     public void deleteBook(long id) {
         repository.deleteById(id);
     }
+
     public void deleteBook(Book b) {
         repository.delete(b);
     }
 
-    public List<Book> get5topDiscount()
-    {
+    public List<Book> get5topDiscount() {
         return repository.findFirst5ByOrderByDiscountDesc();
     }
 
@@ -52,61 +57,36 @@ public class BookService
     }
 
     @Transactional
-    public void decQuantity(Book b)
-    {
+    public void decQuantity(Book b) {
         repository.updateQuantity(b.getId());
     }
 
 
     public List<Book> listAll(String keyword) {
-        if (keyword != null) {
-            return repository.search(keyword);
-        }
-        return repository.findAll();
-    }
-    public boolean isInStock (long id) // todo delete?
-    {
-        Book book = getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
-        return book.getQuantity() != 0;
+
+        return (keyword != null) ? repository.search(keyword) : repository.findAll();
     }
 
-    @Transactional
-    public void pay(List<Book> books)
-    {
+    public boolean isInStock(long id) {
+        Book book = getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
+        return book.getQuantity() > 0;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void pay(List<Book> books) throws Exception {
         double totalPay = 0;
-        for (Book book : books)
-        {
-            totalPay+=book.getPriceAfterDiscount();
-            repository.updateQuantity(book.getId());
-//            if(checkBookValidity(book.getId()))
+        for (Book book : books) {
+            totalPay += book.getPriceAfterDiscount();
+            if (isInStock(book.getId()))
+                repository.updateQuantity(book.getId());
+            else
+                throw new Exception("Book " + book.getId() + " is not in quantity");
+
             saveBook(repository.getById(book.getId()));
         }
         System.out.println("total pay: " + totalPay);
         Payment p = new Payment(totalPay);
         paymentRepository.save(p);
     }
-//    public boolean checkBookValidity(long id, @Valid Book book, BindingResult result)
-//    {
-//        return !result.hasErrors();
-//    }
 
 }
-
-
-//    double totalPay = 0;
-//        for (Book book : books)
-//                {
-//                totalPay += book.getPriceAfterDiscount();
-////            Book dbbook  = getBook(book.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + book.getId()));
-////            if(dbbook.getQuantity() == 0)
-////                return false;
-//
-////            if(!isInStock(book.getId()))
-////                return false;
-//////            book.decrementQuantity();
-//
-//                repository.updateQuantity(book); // todo check if works
-//                saveBook(book);
-//                }
-//                paymentRepository.save(new Payment(totalPay));
-//                return true;

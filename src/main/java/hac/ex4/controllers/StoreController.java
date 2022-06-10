@@ -26,6 +26,7 @@ public class StoreController {
         model.addAttribute("books", bookService.getBooks());
 
         List<Book> booksList = (List<Book>) session.getAttribute("cart");
+
         if(session.getAttribute("cart") == null)
             model.addAttribute("cartSize", 0);
         else
@@ -60,16 +61,15 @@ public class StoreController {
     @GetMapping("/viewCart")
     public String storeCart(Model model, HttpSession session)
     {
-        List<Book> booksList;
-        if( session.getAttribute("cart") == null)
-            booksList = new ArrayList<>();
-        else
-            booksList = (List<Book>) session.getAttribute("cart");
+        Object sessionCart = session.getAttribute("cart");
+        List<Book> booksSessionList = (sessionCart == null) ? new ArrayList<>() : (List<Book>) sessionCart;
         double totalPay = 0;
-        for(int i=0; i< booksList.size(); i++) {
-            totalPay += booksList.get(i).getPriceAfterDiscount();
+        List<Long> bookIdList = new ArrayList<>();
+        for(int i=0; i< booksSessionList.size(); i++) {
+            bookIdList.add(booksSessionList.get(i).getId());
+            totalPay += booksSessionList.get(i).getPriceAfterDiscount();
         }
-        model.addAttribute("books", booksList);
+        model.addAttribute("books", bookService.getBooksById(bookIdList));
         model.addAttribute("totalPay", totalPay);
 
         return "cart";
