@@ -56,6 +56,8 @@ public class BookService {
         return paymentRepository.findAllByOrderByDateCreatedAsc();
     }
 
+    public double sumPayments() { return paymentRepository.sumPayments(); }
+
     @Transactional
     public void decQuantity(Book b) {
         repository.updateQuantity(b.getId());
@@ -72,21 +74,36 @@ public class BookService {
         return book.getQuantity() > 0;
     }
 
-    @Transactional(rollbackOn = Exception.class)
-    public void pay(List<Book> books) throws Exception {
-        double totalPay = 0;
-        for (Book book : books) {
-            totalPay += book.getPriceAfterDiscount();
-            if (isInStock(book.getId()))
-                repository.updateQuantity(book.getId());
-            else
-                throw new Exception("Book " + book.getId() + " is not in quantity");
+//    @Transactional(rollbackOn = Exception.class)
+//    public void pay(List<Book> books) throws Exception {
+//        double totalPay = 0;
+//        for (Book book : books) {
+//            totalPay += book.getPriceAfterDiscount();
+//            if (isInStock(book.getId()))
+//                repository.updateQuantity(book.getId());
+//            else
+//                throw new Exception("Book " + book.getId() + " is not in quantity");
+//
+//            saveBook(repository.getById(book.getId()));
+//        }
+//        Payment p = new Payment(totalPay);
+//        paymentRepository.save(p);
+//    }
 
-            saveBook(repository.getById(book.getId()));
+    @Transactional(rollbackOn = Exception.class)
+    public void pay(List<Long> bookIds) throws Exception {
+        double totalPay = 0;
+        for (Long bookId : bookIds) {
+            Book book  = getBook(bookId).orElseThrow(() -> new IllegalArgumentException("Invalid book Id"));
+            totalPay += book.getPriceAfterDiscount();
+            if (isInStock(bookId))
+                repository.updateQuantity(bookId);
+            else
+                throw new Exception("Book " + bookId + " is not in quantity");
+
+            saveBook(repository.getById(bookId));
         }
-        System.out.println("total pay: " + totalPay);
         Payment p = new Payment(totalPay);
         paymentRepository.save(p);
     }
-
 }

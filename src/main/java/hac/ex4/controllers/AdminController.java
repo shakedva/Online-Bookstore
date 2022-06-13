@@ -20,16 +20,12 @@ public class AdminController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("") //todo edit
+    @GetMapping("")
     public String adminEditStore(Book book, @RequestParam(name = "name", required = false, defaultValue = "") String name, Model model)
     {
-        List<Payment> payments =  bookService.getPayments();
-        double totalPayments = 0;
-        for (Payment payment : payments)
-            totalPayments += payment.getAmount();
-
+        double totalPayments = bookService.getPayments().size() == 0 ? 0 : bookService.sumPayments();
         model.addAttribute("books", bookService.getBooks());
-        model.addAttribute("payments", payments);
+        model.addAttribute("payments", bookService.getPayments());
         model.addAttribute("totalPayments", totalPayments);
         model.addAttribute("errors", false);
         return "admin/adminEdit";
@@ -40,8 +36,10 @@ public class AdminController {
     public String adminAddBook(@Valid Book book, BindingResult result, Model model)
     {
         if (result.hasErrors()) {
+            double totalPayments = bookService.getPayments().size() == 0 ? 0 : bookService.sumPayments();
             model.addAttribute("books", bookService.getBooks());
             model.addAttribute("payments", bookService.getPayments());
+            model.addAttribute("totalPayments", totalPayments);
             model.addAttribute("errors", true);
             return "admin/adminEdit";
         }

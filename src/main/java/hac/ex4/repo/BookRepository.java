@@ -17,7 +17,7 @@ public interface BookRepository extends JpaRepository<Book, Long>  {
     List<Book> search(String keyword);
 
     @Modifying
-    @Query("UPDATE Book b set b.quantity = b.quantity - 1 where b.id = :id") //where quantity > 0  ~~ and b.quantity > 0
+    @Query("UPDATE Book b set b.quantity = b.quantity - 1 where b.id = :id")
     void updateQuantity(@Param(value = "id") long id);
 
     List<Book> findByIdIn(List<Long> bookIds);

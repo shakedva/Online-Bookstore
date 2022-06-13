@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -34,6 +35,8 @@ public class Book
 
     @DecimalMin(value = "0.0",
             message = "The discount must be a floating point number")
+    @DecimalMax(value = "100.0", inclusive = false,
+            message = "The discount cannot be bigger than 100%")
     private double discount = 0;
 
     public Book() {}

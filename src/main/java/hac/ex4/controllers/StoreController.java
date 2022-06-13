@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/")
@@ -24,13 +23,9 @@ public class StoreController {
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
         model.addAttribute("books", bookService.getBooks());
-
-        List<Book> booksList = (List<Book>) session.getAttribute("cart");
-
-        if(session.getAttribute("cart") == null)
-            model.addAttribute("cartSize", 0);
-        else
-            model.addAttribute("cartSize", booksList.size());
+        Object sessionCart = session.getAttribute("cart");
+        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        model.addAttribute("cartSize", booksList.size());
 
         return "bookStore";
     }
@@ -47,29 +42,30 @@ public class StoreController {
     public String storeAddToCart(@RequestParam("id") long id, Model model, HttpSession session)
     {
         Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
-        List<Book> booksList;
-        if( session.getAttribute("cart") == null) {
-            booksList = new ArrayList<>();
-        }
-        else {
-            booksList = (List<Book>) session.getAttribute("cart");
-        }
-        booksList.add(book);
+        Object sessionCart = session.getAttribute("cart");
+        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        booksList.add(id);
         session.setAttribute("cart", booksList);
         return "redirect:/";
     }
+
     @GetMapping("/viewCart")
     public String storeCart(Model model, HttpSession session)
     {
         Object sessionCart = session.getAttribute("cart");
-        List<Book> booksSessionList = (sessionCart == null) ? new ArrayList<>() : (List<Book>) sessionCart;
+        List<Long> bookSessionList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        List<Book> allBooks = bookService.getBooks();
+        List<Long> intersectionBooks = new ArrayList<>();
         double totalPay = 0;
-        List<Long> bookIdList = new ArrayList<>();
-        for(int i=0; i< booksSessionList.size(); i++) {
-            bookIdList.add(booksSessionList.get(i).getId());
-            totalPay += booksSessionList.get(i).getPriceAfterDiscount();
+        for (Book book : allBooks) {
+            for (Long sessionBookId : bookSessionList)
+                if (Objects.equals(sessionBookId, book.getId())) {
+                    totalPay += book.getPriceAfterDiscount();
+                    intersectionBooks.add(sessionBookId);
+                }
         }
-        model.addAttribute("books", bookService.getBooksById(bookIdList));
+        session.setAttribute("cart", intersectionBooks);
+        model.addAttribute("books", bookService.getBooksById(intersectionBooks));
         model.addAttribute("totalPay", totalPay);
 
         return "cart";
@@ -82,13 +78,14 @@ public class StoreController {
                 .orElseThrow(
                         () -> new IllegalArgumentException("Invalid book Id:" + id)
                 );
-        List<Book> booksList =  (List<Book>) session.getAttribute("cart");
-
+        Object sessionCart = session.getAttribute("cart");
+        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
         for (int i=0; i<booksList.size(); i++)
-            if(booksList.get(i).getId() == id){
+            if(booksList.get(i) == id)
+            {
                 booksList.remove(i);
                 break;
-        }
+            }
         if(booksList.size() == 0)
             return "redirect:/emptyCart";
 
@@ -102,66 +99,29 @@ public class StoreController {
         return "redirect:/viewCart";
     }
 
-    //todo delete for testing
-    @GetMapping("/decquantity")
-    public String decquantity() {
-        Book b = bookService
-                .getBook(6)
-                .orElseThrow(
-                        () -> new IllegalArgumentException("Invalid book Id:" + 6)
-                );
-        bookService.decQuantity(b);
-        return "redirect:/viewCart";
-    }
-
+    // todo postmapping
     @GetMapping("/pay")
     public String storePay(Model model, HttpSession session)
     {
-        List<Book> booksList;
-        if( session.getAttribute("cart") == null) {
-            model.addAttribute("message", "The cart is empty!");
-            return "successfulPayment";
+        Object sessionCart = session.getAttribute("cart");
+        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        if( booksList.size() == 0) {
+            model.addAttribute("message", "Your cart is empty!");
+            return "afterPayment";
         }
         else {
             try {
-                booksList = (List<Book>) session.getAttribute("cart");
                 bookService.pay(booksList);
                 session.removeAttribute("cart");
-                model.addAttribute("message", "Successful payment!");
-                return "successfulPayment";
+                model.addAttribute("message", "The payment was successful!");
+                return "afterPayment";
             }
             catch (Exception e) {
-                model.addAttribute("message", "Unsuccessful payment! Please remove the books that are out of stock");
-                return "successfulPayment";
+                model.addAttribute("message", "Unsuccessful payment! Some of your items are not available. Please remove the books that are out of stock");
+                return "afterPayment";
             }
-
         }
     }
 
 }
 
-//    //todo - decrement all books from book db & sum the amount
-//    //       add the payment to the payment db
-//    //       empty the session
-//    //       redirect to successfulpayment html
-//    List<Book> booksList;
-//        if( session.getAttribute("cart") == null) {
-//                //todo redirect to error html page
-//                return "redirect:/viewCart";
-//                }
-//
-//                booksList = (List<Book>) session.getAttribute("cart");
-//        if(bookService.pay(booksList))
-//        {
-//        session.removeAttribute("cart");
-//        model.addAttribute("message", "The payment was successful!");
-//        }
-//        else
-//        {
-//        for (Book book : booksList)
-//        if(!bookService.isInStock(book.getId())) // the book is not in stock
-//        deleteBookFromCart(book.getId(), model, session);
-//
-//        model.addAttribute("message", "Oops!There was a problem with the payment");
-//        }
-//        return "successfulPayment";
