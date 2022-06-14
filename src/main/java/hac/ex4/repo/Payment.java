@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import static java.lang.Double.parseDouble;
+
 @Entity
 public class Payment {
 
@@ -31,6 +33,7 @@ public class Payment {
     public Payment(double amount) {
 
         this.amount = amount;
+        this.amount =  parseDouble(String.format("%.2f", amount));
     }
 
     public Payment() {
@@ -40,28 +43,16 @@ public class Payment {
         return id;
     }
 
-
     public double getAmount() {
         return amount;
     }
 
     public void setAmount(double amount) {
-        this.amount = amount;
+        this.amount =  parseDouble(String.format("%.2f",amount));
     }
 
-    public void setDateCreated(LocalDateTime dateTime) {
-        this.dateCreated = dateTime;
-//        System.out.println("in setDateCreated");
-//        ZoneId z = ZoneId.systemDefault();
-//        this.dateCreated = ZonedDateTime.now( z );
-    }
+    public void setDateCreated(LocalDateTime dateTime) { this.dateCreated = dateTime; }
 
     public LocalDateTime getDateCreated() {return this.dateCreated;}
 
 }
-
-//  @CreationTimestamp
-//    private LocalDateTime dateCreated;
-//
-//    @CreationTimestamp
-////    private java.sql.Timestamp datetime;

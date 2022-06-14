@@ -1,17 +1,15 @@
 package hac.ex4.controllers;
 
 import hac.ex4.repo.Book;
-import hac.ex4.repo.Payment;
 import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.List;
 
+//TODO ADD A JAVADOC FOLDER
 
 @Controller
 @RequestMapping("/admin")
@@ -26,7 +24,7 @@ public class AdminController {
         double totalPayments = bookService.getPayments().size() == 0 ? 0 : bookService.sumPayments();
         model.addAttribute("books", bookService.getBooks());
         model.addAttribute("payments", bookService.getPayments());
-        model.addAttribute("totalPayments", totalPayments);
+        model.addAttribute("totalPayments", String.format("%.2f", totalPayments));
         model.addAttribute("errors", false);
         return "admin/adminEdit";
     }
@@ -39,7 +37,7 @@ public class AdminController {
             double totalPayments = bookService.getPayments().size() == 0 ? 0 : bookService.sumPayments();
             model.addAttribute("books", bookService.getBooks());
             model.addAttribute("payments", bookService.getPayments());
-            model.addAttribute("totalPayments", totalPayments);
+            model.addAttribute("totalPayments", String.format("%.2f", totalPayments));
             model.addAttribute("errors", true);
             return "admin/adminEdit";
         }

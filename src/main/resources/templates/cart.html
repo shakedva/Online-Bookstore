@@ -17,7 +17,14 @@
             <span th:text="${totalPay}"></span>₪
         </h3>
     </div>
-    <div class="p-2 bd-highlight"><a th:if="${totalPay} > 0" th:href="@{/pay}" class="btn btn-primary">Checkout</a></div>
+    <div class="p-2 bd-highlight">
+        <form th:if="${totalPay} > 0" action="#" th:action="@{/pay}" method="post">
+            <button type="submit" class="btn btn-primary">
+                <img th:src="@{/round_credit_card_white_24dp.png}" alt="checkout">
+                <span>Checkout</span>
+            </button>
+        </form>
+    </div>
     <div class="ms-auto p-2 bd-highlight"><a th:href="@{/emptyCart}" class="btn btn-primary">Empty Cart</a>
     </div>
     <div class="p-2 bd-highlight">
@@ -49,7 +56,8 @@
                         </div><br/>
                         <span th:if="${book.quantity} == 0"> Out of Stock </span>
                         <a th:href="@{/removeFromCart/{id}(id=${book.id})}" class="btn btn-primary card-button-bottom"><i
-                                class="fas fa-user-times ml-2"></i>Remove</a>
+                                class="fas fa-user-times ml-2"></i>Remove
+                        </a>
                     </div>
                 </div>
             </div>

@@ -47,7 +47,6 @@ public class StoreController {
     {
         Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
         sessionCartBean.add(id);
-
         return "redirect:/";
     }
 
@@ -65,11 +64,9 @@ public class StoreController {
                     intersectionBooks.add(sessionBookId);
                 }
         }
-        System.out.println("intersectionBooks: " + intersectionBooks);
         sessionCartBean.setCart(intersectionBooks);
         model.addAttribute("books", bookService.getBooksById(intersectionBooks));
-        model.addAttribute("totalPay", totalPay);
-
+        model.addAttribute("totalPay", String.format("%.2f", totalPay));
         return "cart";
     }
 
@@ -99,8 +96,7 @@ public class StoreController {
         return "redirect:/viewCart";
     }
 
-    // todo postmapping
-    @GetMapping("/pay")
+    @PostMapping("/pay")
     public String storePay(Model model)
     {
         ArrayList<Long> booksList = sessionCartBean.getCart();
