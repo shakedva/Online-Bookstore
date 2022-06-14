@@ -23,7 +23,7 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .formLogin()
-                .defaultSuccessUrl("/admin/", true) //todo  /shared (?)
+                .defaultSuccessUrl("/admin/", true)
                 .and()
                 .logout()
                 .logoutSuccessUrl("/admin/")
@@ -32,6 +32,6 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/403.html"); // todo our own page
+                .accessDeniedPage("/error.html");
     }
 }

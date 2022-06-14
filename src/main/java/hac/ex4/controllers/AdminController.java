@@ -55,7 +55,7 @@ public class AdminController {
                         () -> new IllegalArgumentException("Invalid book Id:" + id)
                 );
         bookService.deleteBook(book);
-        return "redirect:/admin"; //todo edit
+        return "redirect:/admin";
     }
 
     @PostMapping("/editBook")
@@ -74,7 +74,7 @@ public class AdminController {
         }
 
         bookService.saveBook(book);
-        return "redirect:/admin"; //todo edit
+        return "redirect:/admin";
     }
 
 }

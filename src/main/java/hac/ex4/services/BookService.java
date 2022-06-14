@@ -74,22 +74,6 @@ public class BookService {
         return book.getQuantity() > 0;
     }
 
-//    @Transactional(rollbackOn = Exception.class)
-//    public void pay(List<Book> books) throws Exception {
-//        double totalPay = 0;
-//        for (Book book : books) {
-//            totalPay += book.getPriceAfterDiscount();
-//            if (isInStock(book.getId()))
-//                repository.updateQuantity(book.getId());
-//            else
-//                throw new Exception("Book " + book.getId() + " is not in quantity");
-//
-//            saveBook(repository.getById(book.getId()));
-//        }
-//        Payment p = new Payment(totalPay);
-//        paymentRepository.save(p);
-//    }
-
     @Transactional(rollbackOn = Exception.class)
     public void pay(List<Long> bookIds) throws Exception {
         double totalPay = 0;

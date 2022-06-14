@@ -1,11 +1,14 @@
 package hac.ex4.controllers;
 
+import hac.ex4.beans.Cart;
 import hac.ex4.repo.Book;
 import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +21,15 @@ public class StoreController {
     @Autowired
     private BookService bookService;
 
+    @Resource(name = "sessionCartBean")
+    private Cart sessionCartBean;
+
     @GetMapping("")
-    public String store(Model model, HttpSession session)
+    public String store(Model model)
     {
         model.addAttribute("discountBooks", bookService.get5topDiscount());
         model.addAttribute("books", bookService.getBooks());
-        Object sessionCart = session.getAttribute("cart");
-        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
-        model.addAttribute("cartSize", booksList.size());
+        model.addAttribute("cartSize", sessionCartBean.getCart().size());
 
         return "bookStore";
     }
@@ -39,23 +43,20 @@ public class StoreController {
     }
 
     @PostMapping("/addToCart")
-    public String storeAddToCart(@RequestParam("id") long id, Model model, HttpSession session)
+    public String storeAddToCart(@RequestParam("id") long id)
     {
         Book book  = bookService.getBook(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
-        Object sessionCart = session.getAttribute("cart");
-        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
-        booksList.add(id);
-        session.setAttribute("cart", booksList);
+        sessionCartBean.add(id);
+
         return "redirect:/";
     }
 
     @GetMapping("/viewCart")
-    public String storeCart(Model model, HttpSession session)
+    public String storeCart(Model model)
     {
-        Object sessionCart = session.getAttribute("cart");
-        List<Long> bookSessionList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        List<Long> bookSessionList = sessionCartBean.getCart();
         List<Book> allBooks = bookService.getBooks();
-        List<Long> intersectionBooks = new ArrayList<>();
+        ArrayList<Long> intersectionBooks = new ArrayList<>();
         double totalPay = 0;
         for (Book book : allBooks) {
             for (Long sessionBookId : bookSessionList)
@@ -64,7 +65,8 @@ public class StoreController {
                     intersectionBooks.add(sessionBookId);
                 }
         }
-        session.setAttribute("cart", intersectionBooks);
+        System.out.println("intersectionBooks: " + intersectionBooks);
+        sessionCartBean.setCart(intersectionBooks);
         model.addAttribute("books", bookService.getBooksById(intersectionBooks));
         model.addAttribute("totalPay", totalPay);
 
@@ -72,14 +74,13 @@ public class StoreController {
     }
 
     @GetMapping("/removeFromCart/{id}")
-    public String deleteBookFromCart(@PathVariable("id") long id, Model model, HttpSession session) {
+    public String deleteBookFromCart(@PathVariable("id") long id) {
         Book book = bookService
                 .getBook(id)
                 .orElseThrow(
                         () -> new IllegalArgumentException("Invalid book Id:" + id)
                 );
-        Object sessionCart = session.getAttribute("cart");
-        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        ArrayList<Long> booksList = sessionCartBean.getCart();
         for (int i=0; i<booksList.size(); i++)
             if(booksList.get(i) == id)
             {
@@ -88,23 +89,22 @@ public class StoreController {
             }
         if(booksList.size() == 0)
             return "redirect:/emptyCart";
-
-        session.setAttribute("cart", booksList);
+        sessionCartBean.setCart(booksList);
         return "redirect:/viewCart";
     }
 
     @GetMapping("/emptyCart")
-    public String deleteBook(HttpSession session) {
-        session.removeAttribute("cart");
+    public String deleteBook() {
+        sessionCartBean.clear();
         return "redirect:/viewCart";
     }
 
     // todo postmapping
     @GetMapping("/pay")
-    public String storePay(Model model, HttpSession session)
+    public String storePay(Model model)
     {
-        Object sessionCart = session.getAttribute("cart");
-        List<Long> booksList = (sessionCart == null) ? new ArrayList<>() : (List<Long>) sessionCart;
+        ArrayList<Long> booksList = sessionCartBean.getCart();
+
         if( booksList.size() == 0) {
             model.addAttribute("message", "Your cart is empty!");
             return "afterPayment";
@@ -112,7 +112,7 @@ public class StoreController {
         else {
             try {
                 bookService.pay(booksList);
-                session.removeAttribute("cart");
+                sessionCartBean.clear();
                 model.addAttribute("message", "The payment was successful!");
                 return "afterPayment";
             }
