@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -56,16 +54,21 @@ public class StoreController {
         List<Long> bookSessionList = sessionCartBean.getCart();
         List<Book> allBooks = bookService.getBooks();
         ArrayList<Long> intersectionBooks = new ArrayList<>();
+        LinkedHashMap<Book, Integer> cart = new LinkedHashMap<Book, Integer>();
         double totalPay = 0;
         for (Book book : allBooks) {
+            int amount = 0;
             for (Long sessionBookId : bookSessionList)
                 if (Objects.equals(sessionBookId, book.getId())) {
                     totalPay += book.getPriceAfterDiscount();
                     intersectionBooks.add(sessionBookId);
+                    amount++;
                 }
+            if(amount > 0)
+                cart.put(book, amount);
         }
         sessionCartBean.setCart(intersectionBooks);
-        model.addAttribute("books", bookService.getBooksById(intersectionBooks));
+        model.addAttribute("books", cart);
         model.addAttribute("totalPay", String.format("%.2f", totalPay));
         return "cart";
     }

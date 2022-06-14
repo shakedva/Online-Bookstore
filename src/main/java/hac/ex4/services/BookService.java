@@ -58,12 +58,6 @@ public class BookService {
 
     public double sumPayments() { return paymentRepository.sumPayments(); }
 
-    @Transactional
-    public void decQuantity(Book b) {
-        repository.updateQuantity(b.getId());
-    }
-
-
     public List<Book> listAll(String keyword) {
 
         return (keyword != null) ? repository.search(keyword) : repository.findAll();

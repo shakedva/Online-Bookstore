@@ -40,24 +40,29 @@
         <div th:case="*">
             </br>
             <div class="row md-1">
-                <div class="card bookCard" th:each="book : ${books}"
+                <div class="card bookCard" th:each="element : ${books}"
                      style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
-                    <img th:src="${book.image}" class="card-img-top" alt="book image">
-                    <div class="card-body book-card-body">
-                        <h5 class="card-title" th:text="${book.name}"></h5>
-                        <div>
-                            Price:
-                            <span th:with="result=${book.price - book.price * book.discount / 100}">
+                    <div th:each="book : ${element.key}">
+                        <img th:src="${book.image}" class="card-img-top" alt="book image">
+                        <div class="card-body book-card-body">
+                            <h5 class="card-title" th:text="${book.name}"></h5>
+                            <div>
+                                Price:
+                                <span th:with="result=${book.price - book.price * book.discount / 100}">
                                     <span th:text="${result}"></span>₪
                             </span>
-                            <small th:if="${book.discount} > 0">
-                                <span th:text="${book.price}"></span>₪
-                            </small>
-                        </div><br/>
-                        <span th:if="${book.quantity} == 0"> Out of Stock </span>
-                        <a th:href="@{/removeFromCart/{id}(id=${book.id})}" class="btn btn-primary card-button-bottom"><i
-                                class="fas fa-user-times ml-2"></i>Remove
-                        </a>
+                                <small th:if="${book.discount} > 0">
+                                    <span th:text="${book.price}"></span>₪
+                                </small>
+                            </div>
+                            <br/>
+                            <span th:if="${book.quantity} == 0"> Out of Stock </span>
+                            <span th:text="${element.value}"> </span>
+                            <a th:href="@{/removeFromCart/{id}(id=${book.id})}"
+                               class="btn btn-primary card-button-bottom"><i
+                                    class="fas fa-user-times ml-2"></i>Remove
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

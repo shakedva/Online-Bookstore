@@ -35,7 +35,5 @@ There are 2 zones in this website
 ### Assumptions
 <ul>
 <li>The admin cannot add/edit a book with a discount of 100% or more.</li>
-<li>When a customer adds multiple of the same book - it will be shown as one item in the cart, but the price will be
-updated as the amount of copies they added.</li>
 <li>The database is named 'ex4.sql'</li>
 </ul>
