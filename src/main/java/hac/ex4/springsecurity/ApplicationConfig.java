@@ -8,9 +8,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * The spring security configuration
+ */
 @Configuration
 @EnableWebSecurity
 public class ApplicationConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * sets the users, their passwords and roles.
+     * @param auth - for authentication
+     * @throws Exception - if it could not configure the authentication
+     */
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder =
@@ -26,6 +34,12 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
                 .withUser("user3").password(encoder.encode("user")).roles("USER");
 
     }
+
+    /**
+     * sets the login and logout and the protected pages.
+     * @param http security
+     * @throws Exception - if it could not configure the authentication
+     */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
