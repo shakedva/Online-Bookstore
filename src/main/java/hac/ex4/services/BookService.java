@@ -52,14 +52,6 @@ public class BookService {
     public Optional<Book> getBook(long id) {
         return repository.findById(id);
     }
-//
-//  todo delete
-//    public List<Book> getBooksById(List<Long> bookIds) {
-//        return repository.findByIdIn(bookIds);
-//    }
-//    public void deleteBook(long id) {
-//        repository.deleteById(id);
-//    }
 
     /**
      * @param b - delete the book b from the database
