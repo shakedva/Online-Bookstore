@@ -35,5 +35,9 @@ There are 2 zones in this website
 ### Assumptions
 <ul>
 <li>The admin cannot add/edit a book with a discount of 100% or more.</li>
+<li>By the time the user completes the payment, the stock might change. If a book is not available anymore
+the payment will be canceled and will show a relevant message. 
+The user will need to remove items that are out of stock. Books that are no longer in the store (deleted) will be removed
+automatically from the user's cart.</li>
 <li>The database is named 'ex4.sql'</li>
 </ul>

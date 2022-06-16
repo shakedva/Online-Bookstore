@@ -19,39 +19,8 @@
     Your results for "<i th:text="${keyword}"></i>" are:
 </h3>
 </br>
-<div class="row">
-    <div th:switch="${searchedBooks.size()}">
-        <h2 th:case="0">No results</h2>
-        <div th:case="*">
-            <div class="row md-1">
-                <div class="card bookCard" th:each="book : ${searchedBooks}"
-                     style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
-                    <img th:src="${book.image}" class="card-img-top" alt="book image">
-                    <div class="card-body book-card-body">
-                        <h5 class="card-title" th:text="${book.name}"></h5>
-                        <div>
-                            Price:
-                            <span th:with="result=${book.price - book.price * book.discount / 100}">
-                                    <span th:text="${result}"></span>₪
-                            </span>
-                            <small th:if="${book.discount} > 0">
-                                <span th:text="${book.price}"></span>₪
-                            </small>
-                        </div> <br/>
-                        <span th:if="${book.quantity} == 0"> Out of Stock </span>
-                        <span class="card-button-bottom" th:if="${book.quantity} != 0">
-                            <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
-                                <input type="hidden" name="id" th:value="${book.id}">
-                                <button type="submit" class="btn btn-primary">
-                                <img th:src="@{/round_add_shopping_cart_24dp.png}" alt="add to shopping cart">
-                                </button>
-                            </form>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<div th:replace="bookCard.html :: bookCard(field=${searchedBooks}, value='store')">
 </div>
 
 </body>

@@ -86,45 +86,11 @@
         </div>
     </div>
     <hr>
-    <div class="row">
-        <div th:switch="${books.size()}">
-            <h2 th:case="0">No books yet!</h2>
-            <div th:case="*">
-                <h2 class="my-5">Books</h2>
-                <div class="row md-1">
-                    <div class="card bookCard" th:each="book : ${books}"
-                         style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
-                        <img th:src="${book.image}" class="card-img-top" alt="book image">
-                        <div class="card-body book-card-body">
-                            <h5 class="card-title" th:text="${book.name}"></h5>
-                            <div>Quantity: <span th:text="${book.quantity}"></span></div>
-                            <div>
-                                Price:
-                                <span th:with="result=${book.price - book.price * book.discount / 100}">
-                                    <span th:text="${result}"></span>₪
-                            </span>
-                                <small th:if="${book.discount} > 0">
-                                    <span th:text="${book.price}"></span>₪
-                                </small>
-                            </div>
-                            <br/>
-                            <span class="card-button-bottom d-flex justify-content-around">
-                                <form action="#" th:action="@{/admin/editBook}" th:object="${book}" method="post">
-                                    <input type="hidden" name="id" th:value="${book.id}">
-                                    <button type="submit" class="btn btn-primary">
-                                        <img th:src="@{/round_edit_white_24dp.png}" alt="Edit">
-                                    </button>
-                                </form>
-                                <a th:href="@{/admin/delete/{id}(id=${book.id})}" class="btn btn-secondary">
-                                    <img th:src="@{/round_delete_white_24dp.png}" alt="delete">
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    <h2>Books</h2>
+    <div th:replace="bookCard.html :: bookCard(field=${books}, value='admin')">
     </div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"

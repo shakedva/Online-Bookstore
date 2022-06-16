@@ -1,0 +1,55 @@
+
+
+<div th:fragment="bookCard(field, value)">
+
+    <div class="row">
+        <div th:switch="${field.size()}">
+            <h2 th:case="0">No books yet!</h2>
+            <div th:case="*">
+                <div class="row md-1">
+                    <div class="card bookCard" th:each="book : ${field}"
+                         style="width: 12rem ; margin-right: 1rem ; margin-bottom: 1rem; text-align:center">
+                        <img th:src="${book.image}" class="card-img-top" alt="book image">
+                        <div class="card-body book-card-body">
+                            <h5 class="card-title" th:text="${book.name}"></h5>
+                            <div>
+                                Price:
+                                <span th:with="result=${book.price - book.price * book.discount / 100}">
+                                    <span th:text="${result}"></span>₪
+                            </span>
+                                <small th:if="${book.discount} > 0">
+                                    <span th:text="${book.price}"></span>₪
+                                </small>
+                            </div><br/>
+                            <span th:if="${book.quantity} == 0"> Out of Stock </span>
+
+                            <span th:if="${value} == 'store'">
+                                <span class="card-button-bottom" th:if="${book.quantity} > 0">
+                                    <form action="#" th:action="@{/addToCart}" th:object="${book}" method="post">
+                                        <input type="hidden" name="id" th:value="${book.id}">
+                                        <button type="submit" class="btn btn-primary">
+                                        <img th:src="@{/round_add_shopping_cart_24dp.png}" alt="add to shopping cart">
+                                        </button>
+                                    </form>
+                                </span>
+                            </span>
+                            <span class="card-button-bottom d-flex justify-content-around" th:if="${value} == 'admin'">
+                                <form action="#" th:action="@{/admin/editBook}" th:object="${book}" method="post">
+                                    <input type="hidden" name="id" th:value="${book.id}">
+                                    <button type="submit" class="btn btn-primary">
+                                        <img th:src="@{/round_edit_white_24dp.png}" alt="Edit">
+                                    </button>
+                                </form>
+                                <a th:href="@{/admin/delete/{id}(id=${book.id})}" class="btn btn-secondary">
+                                    <img th:src="@{/round_delete_white_24dp.png}" alt="delete">
+                                </a>
+                            </span>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
