@@ -30,10 +30,12 @@ public class Payment {
     @CreationTimestamp()
     private LocalDateTime dateCreated;
 
-    public Payment(double amount) {
+    private String name;
 
-        this.amount = amount;
+    public Payment(double amount, String name) {
+//        this.amount = amount;
         this.amount =  parseDouble(String.format("%.2f", amount));
+        this.name = name;
     }
 
     public Payment() {
@@ -54,5 +56,9 @@ public class Payment {
     public void setDateCreated(LocalDateTime dateTime) { this.dateCreated = dateTime; }
 
     public LocalDateTime getDateCreated() {return this.dateCreated;}
+
+    public void setName(String name) { this.name = name; }
+
+    public String getName() {return this.name;}
 
 }

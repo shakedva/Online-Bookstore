@@ -17,19 +17,26 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
                 PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth
                 .inMemoryAuthentication()
-                .withUser("admin").password(encoder.encode("password")).roles("ADMIN");
+                .withUser("admin").password(encoder.encode("password")).roles("ADMIN").
+                and()
+                .withUser("user1").password(encoder.encode("user")).roles("USER").
+                and()
+                .withUser("user2").password(encoder.encode("user")).roles("USER").
+                and()
+                .withUser("user3").password(encoder.encode("user")).roles("USER");
+
     }
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .formLogin()
-                .defaultSuccessUrl("/admin/", true)
                 .and()
                 .logout()
-                .logoutSuccessUrl("/admin/")
+                .logoutSuccessUrl("/")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/pay").hasAnyRole("USER", "ADMIN")
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/error.html");

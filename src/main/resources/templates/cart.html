@@ -18,12 +18,10 @@
         </h3>
     </div>
     <div class="p-2 bd-highlight">
-        <form th:if="${totalPay} > 0" action="#" th:action="@{/pay}" method="post">
-            <button type="submit" class="btn btn-primary">
-                <img th:src="@{/round_credit_card_white_24dp.png}" alt="checkout">
-                <span>Checkout</span>
-            </button>
-        </form>
+        <a th:if="${totalPay} > 0" href="#" th:href="@{/pay}" role="button" class="btn btn-primary">
+            <img th:src="@{/round_credit_card_white_24dp.png}" alt="checkout">
+            <span>Checkout</span>
+        </a>
     </div>
     <div class="ms-auto p-2 bd-highlight"><a th:href="@{/emptyCart}" class="btn btn-primary">Empty Cart</a>
     </div>

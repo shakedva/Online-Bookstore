@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -103,8 +104,8 @@ public class StoreController {
         return "redirect:/viewCart";
     }
 
-    @PostMapping("/pay")
-    public String storePay(Model model)
+    @GetMapping("/pay")
+    public String storePay(Model model, Principal principal)
     {
         ArrayList<Long> booksList = sessionCartBean.getCart();
 
@@ -114,7 +115,7 @@ public class StoreController {
         }
         else {
             try {
-                bookService.pay(booksList);
+                bookService.pay(booksList, principal.getName());
                 sessionCartBean.clear();
                 model.addAttribute("message", "The payment was successful!");
                 return "afterPayment";

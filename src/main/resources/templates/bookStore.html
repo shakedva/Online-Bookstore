@@ -24,8 +24,13 @@
     </div>
     <div class="col-1">
         <a role="button" class="btn btn-primary" href="/viewCart">
-            <img th:src="@{/round_shopping_cart_white_24dp.png}" alt="cart" >
+            <img th:src="@{/round_shopping_cart_white_24dp.png}" alt="cart">
             (<span th:text="${cartSize}"></span>)
+        </a>
+    </div>
+    <div class="col-1">
+        <a role="button" class="btn btn-primary" href="/logout"> Logout
+            <img th:src="@{/round_logout_white_24dp.png}" alt="logout">
         </a>
     </div>
 </div>

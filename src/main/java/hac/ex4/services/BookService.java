@@ -6,13 +6,8 @@ import hac.ex4.repo.Payment;
 import hac.ex4.repo.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +64,7 @@ public class BookService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public void pay(List<Long> bookIds) throws Exception {
+    public void pay(List<Long> bookIds, String name) throws Exception {
         double totalPay = 0;
         for (Long bookId : bookIds) {
             Book book  = getBook(bookId).orElseThrow(() -> new IllegalArgumentException("Invalid book Id"));
@@ -81,7 +76,7 @@ public class BookService {
 
             saveBook(repository.getById(bookId));
         }
-        Payment p = new Payment(totalPay);
+        Payment p = new Payment(totalPay, name);
         paymentRepository.save(p);
     }
 }

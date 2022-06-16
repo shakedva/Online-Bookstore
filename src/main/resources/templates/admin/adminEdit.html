@@ -65,6 +65,7 @@
                                 <thead>
                                 <tr>
                                     <th>Id</th>
+                                    <th>User</th>
                                     <th>Amount</th>
                                     <th>Date Purchased</th>
                                 </tr>
@@ -72,6 +73,7 @@
                                 <tbody>
                                 <tr th:each="payment : ${payments}">
                                     <td th:text="${payment.id}"></td>
+                                    <td th:text="${payment.name}"></td>
                                     <td>
                                         <span th:text="${payment.amount}"></span>₪
                                     </td>
