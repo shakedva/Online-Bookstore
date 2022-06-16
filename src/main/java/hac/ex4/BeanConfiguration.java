@@ -5,7 +5,9 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
+/**
+ * the class for Bean Configuration
+ */
 @Configuration
 public class BeanConfiguration {
 
