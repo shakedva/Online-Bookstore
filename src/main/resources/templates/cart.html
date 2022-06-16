@@ -49,7 +49,7 @@
                             <div>
                                 Price:
                                 <span th:with="result=${book.price - book.price * book.discount / 100}">
-                                    <span th:text="${result}"></span>₪
+                                    <span th:text="${#numbers.formatDecimal(result,0,'POINT',2,'POINT')}"></span>₪
                             </span>
                                 <small th:if="${book.discount} > 0">
                                     <span th:text="${book.price}"></span>₪
@@ -58,10 +58,12 @@
                             <br/>
                             <span th:if="${book.quantity} == 0"> Out of Stock </span>
                             <span>Quantity: <span th:text="${element.value}"> </span></span>
-                            <a th:href="@{/removeFromCart/{id}(id=${book.id})}"
-                               class="btn btn-primary card-button-bottom"><i
-                                    class="fas fa-user-times ml-2"></i>Remove
-                            </a>
+                            <div class="card-button-bottom d-flex align-items-end justify-content-center">
+                                <a th:href="@{/removeFromCart/{id}(id=${book.id})}"
+                                   class="btn btn-primary "><i
+                                        class="fas fa-user-times ml-2"></i>Remove
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
