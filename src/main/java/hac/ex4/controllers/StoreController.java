@@ -1,20 +1,24 @@
 package hac.ex4.controllers;
 
 import hac.ex4.beans.Cart;
+import hac.ex4.listeners.SessionListenerCounter;
 import hac.ex4.repo.Book;
 import hac.ex4.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
 @RequestMapping("/")
 public class StoreController {
+
+    @Resource(name="sessionListenerWithMetrics")
+    private ServletListenerRegistrationBean<SessionListenerCounter> metrics;
 
     @Autowired
     private BookService bookService;

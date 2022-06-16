@@ -57,7 +57,7 @@
                             </div>
                             <br/>
                             <span th:if="${book.quantity} == 0"> Out of Stock </span>
-                            <span th:text="${element.value}"> </span>
+                            <span>Quantity: <span th:text="${element.value}"> </span></span>
                             <a th:href="@{/removeFromCart/{id}(id=${book.id})}"
                                class="btn btn-primary card-button-bottom"><i
                                     class="fas fa-user-times ml-2"></i>Remove
