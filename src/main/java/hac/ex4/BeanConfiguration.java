@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BeanConfiguration {
 
+    /**
+     * @return - a listener for the program session
+     */
     @Bean
     public ServletListenerRegistrationBean<SessionListenerCounter> sessionListenerWithMetrics() {
         ServletListenerRegistrationBean<SessionListenerCounter> listenerRegBean = new ServletListenerRegistrationBean<>();

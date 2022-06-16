@@ -28,7 +28,7 @@ There are 2 zones in this website
     <li>Search books with a relevant keyword</li>
     <li>Add to shopping cart</li>
     <li>View and edit shopping cart</li>
-    <li>Purchase items from shopping cart</li>
+    <li>Purchase items from shopping cart - access only to logged-in users </li>
     </ul>
 </ol>
 
@@ -40,4 +40,5 @@ the payment will be canceled and will show a relevant message.
 The user will need to remove items that are out of stock. Books that are no longer in the store (deleted) will be removed
 automatically from the user's cart.</li>
 <li>The database is named 'ex4.sql'</li>
+<li>Javadoc is located in the api directory</li>
 </ul>
